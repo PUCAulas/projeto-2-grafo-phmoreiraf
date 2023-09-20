@@ -24,6 +24,7 @@ public class Grafo {
         arestas.add(aresta);
     }
 
+    
 
     private Cidade encontrarCidadeMaisProximaNaoVisitada(Cidade cidade, Set<Cidade> visitadas) {
         Cidade maisProxima = null;
