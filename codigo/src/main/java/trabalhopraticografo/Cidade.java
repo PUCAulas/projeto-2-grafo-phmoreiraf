@@ -1,12 +1,12 @@
 package trabalhopraticografo;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Cidade {
     String nome;
     int id;
     Map<Cidade, Integer> vizinhos;  // Mapeia as cidades vizinhas para suas distâncias.
+    //List<Cidade> cidades;  // Lista de cidade
 
     public Cidade(String nome, int id) {
         this.nome = nome;

@@ -106,7 +106,7 @@ public class Grafo {
     // todas as cidades.
     public List<Cidade> recomendarRotaPassageiro(Cidade cidadeSede) {
         List<Cidade> rotaRecomendada = new ArrayList<>();
-        Set<Cidade> visitadas = new HashSet<>();
+        //Set<Cidade> visitadas = new HashSet<>();
         Map<Cidade, Integer> distancias = new HashMap<>();
         Map<Cidade, Cidade> predecessores = new HashMap<>();
 
@@ -150,6 +150,14 @@ public class Grafo {
         return rotaRecomendada;
     }
 
+    public Cidade buscarCidadePorNome(String nome) {
+        for (Cidade cidade : cidades) {
+            if (cidade.getNome().equalsIgnoreCase(nome)) {
+                return cidade;
+            }
+        }
+        return null; // Retorna null se a cidade não for encontrada
+    }
     /*
      * private Cidade encontrarCidadeMaisProximaNaoVisitada(Cidade cidade,
      * Set<Cidade> visitadas) {

@@ -1,3 +1,5 @@
+package trabalhopraticografo;
+
 import java.util.*;
 
 class BFS {
