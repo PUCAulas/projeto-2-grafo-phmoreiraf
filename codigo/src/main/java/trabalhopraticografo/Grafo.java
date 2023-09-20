@@ -20,7 +20,8 @@ public class Grafo {
         arestas.add(aresta);
     }
 
-     // Requisito (a): Verificar se existe estrada de qualquer cidade para qualquer cidade.
+    // Requisito (a): Verificar se existe estrada de qualquer cidade para qualquer
+    // cidade.
     public boolean existeEstradaEntreCidades(Cidade cidadeOrigem, Cidade cidadeDestino) {
         Set<Cidade> visitadas = new HashSet<>();
         Queue<Cidade> fila = new LinkedList<>();
@@ -66,7 +67,8 @@ public class Grafo {
             }
         }
 
-        // Todas as cidades acessíveis foram visitadas. As inacessíveis estão na lista de não visitadas.
+        // Todas as cidades acessíveis foram visitadas. As inacessíveis estão na lista
+        // de não visitadas.
         for (Cidade cidade : cidades) {
             if (!visitadas.contains(cidade)) {
                 cidadesInacessiveis.add(cidade);
@@ -100,7 +102,8 @@ public class Grafo {
         return rotaRecomendada;
     }
 
-     // Requisito (d): Recomendar uma rota para um passageiro que deseja visitar todas as cidades.
+    // Requisito (d): Recomendar uma rota para um passageiro que deseja visitar
+    // todas as cidades.
     public List<Cidade> recomendarRotaPassageiro(Cidade cidadeSede) {
         List<Cidade> rotaRecomendada = new ArrayList<>();
         Set<Cidade> visitadas = new HashSet<>();
@@ -133,35 +136,38 @@ public class Grafo {
                 }
             }
         }
- // Reconstrói a rota a partir dos predecessores.
+        // Reconstrói a rota a partir dos predecessores.
         Cidade cidadeAtual = cidadeSede;
         while (predecessores.containsKey(cidadeAtual)) {
             rotaRecomendada.add(cidadeAtual);
             cidadeAtual = predecessores.get(cidadeAtual);
         }
 
-        rotaRecomendada.add(cidadeSede);  // Retornar à cidade sede no final da rota.
+        rotaRecomendada.add(cidadeSede); // Retornar à cidade sede no final da rota.
 
         Collections.reverse(rotaRecomendada);
 
         return rotaRecomendada;
     }
 
-    /*private Cidade encontrarCidadeMaisProximaNaoVisitada(Cidade cidade, Set<Cidade> visitadas) {
-        Cidade maisProxima = null;
-        int menorDistancia = Integer.MAX_VALUE;
-
-        for (Map.Entry<Cidade, Integer> vizinhoEntry : cidade.vizinhos.entrySet()) {
-            Cidade vizinho = vizinhoEntry.getKey();
-            int distancia = vizinhoEntry.getValue();
-
-            if (!visitadas.contains(vizinho) && distancia < menorDistancia) {
-                maisProxima = vizinho;
-                menorDistancia = distancia;
-            }
-        }
-
-        return maisProxima;
-    }*/
+    /*
+     * private Cidade encontrarCidadeMaisProximaNaoVisitada(Cidade cidade,
+     * Set<Cidade> visitadas) {
+     * Cidade maisProxima = null;
+     * int menorDistancia = Integer.MAX_VALUE;
+     * 
+     * for (Map.Entry<Cidade, Integer> vizinhoEntry : cidade.vizinhos.entrySet()) {
+     * Cidade vizinho = vizinhoEntry.getKey();
+     * int distancia = vizinhoEntry.getValue();
+     * 
+     * if (!visitadas.contains(vizinho) && distancia < menorDistancia) {
+     * maisProxima = vizinho;
+     * menorDistancia = distancia;
+     * }
+     * }
+     * 
+     * return maisProxima;
+     * }
+     */
 
 }
