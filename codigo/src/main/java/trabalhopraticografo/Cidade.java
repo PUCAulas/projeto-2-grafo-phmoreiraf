@@ -5,12 +5,13 @@ import java.util.*;
 public class Cidade {
     String nome;
     int id;
+    int proxId = 0;
     Map<Cidade, Integer> vizinhos;  // Mapeia as cidades vizinhas para suas distâncias.
     //List<Cidade> cidades;  // Lista de cidade
 
-    public Cidade(String nome, int id) {
+    public Cidade(String nome) {
+        this.id = proxId + 1;
         this.nome = nome;
-        this.id = id;
         this.vizinhos = new HashMap<>();
     }
 

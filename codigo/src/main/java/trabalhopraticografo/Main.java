@@ -18,7 +18,7 @@ public class Main {
 
             // Ler a cidade sede da rodoviária
             String cidadeSedeNome = scanner.nextLine();
-            Cidade cidadeSede = new Cidade(cidadeSedeNome, 0);
+            Cidade cidadeSede = new Cidade(cidadeSedeNome);
 
             // Adicionar a cidade sede ao grafo
             grafo.adicionarCidade(cidadeSede);
@@ -30,7 +30,7 @@ public class Main {
                 String nomeCidade = partes[0].trim();
                 String[] conexoes = partes[1].split(",");
 
-                Cidade cidade = new Cidade(nomeCidade, 0);
+                Cidade cidade = new Cidade(nomeCidade);
                 grafo.adicionarCidade(cidade);
 
                 for (String conexao : conexoes) {
@@ -39,7 +39,7 @@ public class Main {
                     int peso = Integer.parseInt(infoConexao[1].replace("(", "").replace(")", "").trim());
 
                     // Criar uma aresta e adicionar ao grafo
-                    Aresta aresta = new Aresta(cidade, new Cidade(cidadeDestinoNome, 0), peso);
+                    Aresta aresta = new Aresta(cidade, new Cidade(cidadeDestinoNome), peso);
                     grafo.adicionarAresta(aresta);
                 }
             }
