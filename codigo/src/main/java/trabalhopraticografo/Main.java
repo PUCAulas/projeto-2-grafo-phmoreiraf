@@ -7,7 +7,7 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         // Nome do arquivo de entrada
-        String arquivoEntrada = "dados.txt";
+        String arquivoEntrada = "/src/main/java/trabalhopraticografo/arquivo/registro.txt";
 
         try {
             // Criar um Scanner para ler o arquivo
