@@ -7,39 +7,37 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         // Nome do arquivo de entrada
-        String arquivoEntrada = "/src/main/java/trabalhopraticografo/arquivo/registro.txt";
-
+        String arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/registro.txt";
         try {
-            // Criar um Scanner para ler o arquivo
             Scanner scanner = new Scanner(new File(arquivoEntrada));
-
-            // Criar um grafo
             Grafo grafo = new Grafo();
 
-            // Ler a cidade sede da rodoviária
-            String cidadeSedeNome = scanner.nextLine();
-            Cidade cidadeSede = new Cidade(cidadeSedeNome);
-
-            // Adicionar a cidade sede ao grafo
-            grafo.adicionarCidade(cidadeSede);
-
-            // Ler as cidades e suas conexões a partir do arquivo
+            // Processar as linhas do arquivo
             while (scanner.hasNextLine()) {
                 String linha = scanner.nextLine();
                 String[] partes = linha.split(":");
-                String nomeCidade = partes[0].trim();
+                String nomeCidadeOrigem = partes[0].trim();
                 String[] conexoes = partes[1].split(",");
 
-                Cidade cidade = new Cidade(nomeCidade);
-                grafo.adicionarCidade(cidade);
+                // Criar a cidade de origem
+                Cidade cidadeOrigem = new Cidade(nomeCidadeOrigem);
+                grafo.adicionarCidade(cidadeOrigem);
 
+                // Processar as conexões da cidade de origem
                 for (String conexao : conexoes) {
                     String[] infoConexao = conexao.trim().split("\\s+");
-                    String cidadeDestinoNome = infoConexao[0].trim();
-                    int peso = Integer.parseInt(infoConexao[1].replace("(", "").replace(")", "").trim());
+                    String nomeCidadeDestino = infoConexao[0].trim();
+
+                    int peso;
+                    try {
+                        peso = Integer.parseInt(infoConexao[1].replace("(", "").replace(")", "").trim());
+                    } catch (NumberFormatException e) {
+                        System.err.println("Erro ao converter peso para número inteiro: " + infoConexao[1]);
+                        continue; // Pule esta iteração do loop e continue com a próxima conexão
+                    }
 
                     // Criar uma aresta e adicionar ao grafo
-                    Aresta aresta = new Aresta(cidade, new Cidade(cidadeDestinoNome), peso);
+                    Aresta aresta = new Aresta(cidadeOrigem, new Cidade(nomeCidadeDestino), peso);
                     grafo.adicionarAresta(aresta);
                 }
             }
@@ -88,7 +86,8 @@ public class Main {
                         Cidade cidadeSedeInacessivel = grafo.buscarCidadePorNome(sedeNome);
 
                         if (cidadeSedeInacessivel != null) {
-                            List<Cidade> cidadesInacessiveis = grafo.identificarCidadesInacessiveis(cidadeSedeInacessivel);
+                            List<Cidade> cidadesInacessiveis = grafo
+                                    .identificarCidadesInacessiveis(cidadeSedeInacessivel);
                             if (!cidadesInacessiveis.isEmpty()) {
                                 System.out.println("Cidades inacessíveis a partir de " + sedeNome + ": ");
                                 for (Cidade cidadeInacessivel : cidadesInacessiveis) {
@@ -109,7 +108,8 @@ public class Main {
                         Cidade cidadeSedeRecomendacao = grafo.buscarCidadePorNome(sedeRecomendacaoNome);
 
                         if (cidadeSedeRecomendacao != null) {
-                            List<Cidade> recomendacaoVisita = grafo.recomendarVisitaTodasCidades(cidadeSedeRecomendacao);
+                            List<Cidade> recomendacaoVisita = grafo
+                                    .recomendarVisitaTodasCidades(cidadeSedeRecomendacao);
                             if (!recomendacaoVisita.isEmpty()) {
                                 System.out.println("Recomendação de visitação em todas as cidades: ");
                                 for (Cidade cidadeVisita : recomendacaoVisita) {
