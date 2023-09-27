@@ -28,6 +28,7 @@ public class AppTest {
         // Adicione as conexões entre as cidades ao grafo
         cidadeA.adicionarVizinho(cidadeB, 10);
         cidadeA.adicionarVizinho(cidadeC, 15);
+        cidadeA.adicionarVizinho(cidadeD, 20);
         cidadeA.adicionarVizinho(cidadeC, 20);
         cidadeB.adicionarVizinho(cidadeC, 5);
 
@@ -40,7 +41,7 @@ public class AppTest {
     @Test
     void testExisteEstradaEntreCidades() {
         assertTrue(grafo.existeEstradaEntreCidades(cidadeA, cidadeB));
-        assertFalse(grafo.existeEstradaEntreCidades(cidadeA, cidadeD));
+        assertFalse(grafo.existeEstradaEntreCidades(cidadeC, cidadeB));
     }
 
     @Test
