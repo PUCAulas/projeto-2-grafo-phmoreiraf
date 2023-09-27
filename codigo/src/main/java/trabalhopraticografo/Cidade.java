@@ -3,14 +3,14 @@ package trabalhopraticografo;
 import java.util.*;
 
 public class Cidade {
+    private static int proxId = 0;
+
     String nome;
     int id;
-    int proxId = 0;
-    Map<Cidade, Integer> vizinhos;  // Mapeia as cidades vizinhas para suas distâncias.
-    //List<Cidade> cidades;  // Lista de cidade
+    Map<Cidade, Integer> vizinhos; // Mapeia as cidades vizinhas para suas distâncias.
 
     public Cidade(String nome) {
-        this.id = proxId + 1;
+        this.id = proxId++;
         this.nome = nome;
         this.vizinhos = new HashMap<>();
     }

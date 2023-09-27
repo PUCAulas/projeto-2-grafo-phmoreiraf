@@ -1,44 +1,66 @@
 package trabalhopraticografo;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.*;
+import org.junit.jupiter.api.BeforeEach;
 
-class AppTest {
+public class AppTest {
 
+    private Grafo grafo;
     private Cidade cidadeA;
     private Cidade cidadeB;
     private Cidade cidadeC;
     private Cidade cidadeD;
-    private Cidade cidadeE;
 
-    @Before
-    public void setUp() {
-        // Crie algumas cidades e adicione estradas entre elas para testar
-        cidadeA = new Cidade("A");
-        cidadeB = new Cidade("B");
-        cidadeC = new Cidade("C");
-        cidadeD = new Cidade("D");
-        cidadeE = new Cidade("E");
+    @BeforeEach
+    void setUp() {
+        grafo = new Grafo();
+        cidadeA = new Cidade("Cidade A");
+        cidadeB = new Cidade("Cidade B");
+        cidadeC = new Cidade("Cidade C");
+        cidadeD = new Cidade("Cidade D");
 
+        // Adicione as conexões entre as cidades ao grafo
         cidadeA.adicionarVizinho(cidadeB, 10);
+        cidadeA.adicionarVizinho(cidadeC, 20);
         cidadeB.adicionarVizinho(cidadeC, 5);
-        cidadeC.adicionarVizinho(cidadeD, 8);
-    }
-    @Test
-    public void testExisteEstradaEntreCidades() {
-        assertTrue(cidadeA.existeEstradaEntreCidades(cidadeA, cidadeB)); // Deve existir uma estrada
-        assertTrue(cidadeA.existeEstradaEntreCidades(cidadeA, cidadeC)); // Deve existir uma estrada
-        assertTrue(cidadeA.existeEstradaEntreCidades(cidadeA, cidadeD)); // Deve existir uma estrada
-        assertFalse(cidadeA.existeEstradaEntreCidades(cidadeA, cidadeE)); // Não deve existir uma estrada
+
+        grafo.adicionarCidade(cidadeA);
+        grafo.adicionarCidade(cidadeB);
+        grafo.adicionarCidade(cidadeC);
     }
 
     @Test
-    public void testIdentificarCidadesInacessiveis() {
-        // A cidade A é a cidade sede, então todas as outras devem ser acessíveis
-        assertEquals(0, cidadeA.identificarCidadesInacessiveis(cidadeA).size());
+    void testExisteEstradaEntreCidades() {
+        assertTrue(grafo.existeEstradaEntreCidades(cidadeA, cidadeB));
+        assertFalse(grafo.existeEstradaEntreCidades(cidadeA, cidadeD));
+    }
 
-        // Se a cidade B for removida das vizinhas de A, ela deve ser inacessível
-        cidadeA.getVizinhos().remove(cidadeB);
-        assertEquals(1, cidadeA.identificarCidadesInacessiveis(cidadeA).size());
-        assertTrue(cidadeA.identificarCidadesInacessiveis(cidadeA).contains(cidadeB));
+    @Test
+    void testIdentificarCidadesInacessiveis() {
+        assertEquals(0, grafo.identificarCidadesInacessiveis(cidadeA).size());
+        assertEquals(3, grafo.identificarCidadesInacessiveis(cidadeD).size());
+    }
+
+    @Test
+    void testRecomendarVisitaTodasCidades() {
+        assertEquals(grafo.getCidades().size(), grafo.recomendarVisitaTodasCidades(cidadeA).size());
+    }
+
+    @Test
+    void testRecomendarRotaPassageiro() {
+        assertTrue(grafo.recomendarRotaPassageiro(cidadeA).size() >= 1);
+        assertTrue(grafo.recomendarRotaPassageiro(cidadeC).size() >= 1);
+    }
+
+    @Test
+    void testEncontrarCidadeMaisProxima() {
+        assertNull(grafo.encontrarCidadeMaisProxima(cidadeA));
+        assertEquals(null, grafo.encontrarCidadeMaisProxima(cidadeB));
     }
 }

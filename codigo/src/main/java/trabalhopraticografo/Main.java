@@ -160,7 +160,4 @@ public class Main {
         }
     }
 
-    /*private static void lerArquivoDeDados(String arquivo, Grafo grafo) {
-        // Implemente a leitura do arquivo e a criação das cidades e arestas
-    }*/
 }
