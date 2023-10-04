@@ -11,7 +11,7 @@ public class Cidade {
 
     public Cidade(String nome) {
         this.id = proxId++;
-        this.nome = nome;
+        this.nome = nome.toLowerCase(); // Armazenar o nome em minúsculas
         this.vizinhos = new HashMap<>();
     }
 

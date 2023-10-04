@@ -43,7 +43,7 @@ public class Main {
             }
 
             // Menu de operações
-            Scanner input = new Scanner(System.in);
+            Scanner sc = new Scanner(System.in);
             int escolha;
 
             do {
@@ -54,15 +54,15 @@ public class Main {
                 System.out.println("4. Recomendar rota para um passageiro");
                 System.out.println("5. Sair");
                 System.out.print("Escolha: ");
-                escolha = input.nextInt();
+                escolha = sc.nextInt();
+                sc.nextLine();
 
                 switch (escolha) {
                     case 1:
                         System.out.print("Informe o nome da cidade de origem: ");
-                        input.nextLine(); // Consumir a quebra de linha
-                        String origemNome = input.nextLine();
+                        String origemNome = sc.nextLine();
                         System.out.print("Informe o nome da cidade de destino: ");
-                        String destinoNome = input.nextLine();
+                        String destinoNome = sc.nextLine();
 
                         Cidade origem = grafo.buscarCidadePorNome(origemNome);
                         Cidade destino = grafo.buscarCidadePorNome(destinoNome);
@@ -80,8 +80,7 @@ public class Main {
                         break;
                     case 2:
                         System.out.print("Informe o nome da cidade sede: ");
-                        input.nextLine(); // Consumir a quebra de linha
-                        String sedeNome = input.nextLine();
+                        String sedeNome = sc.nextLine();
 
                         Cidade cidadeSedeInacessivel = grafo.buscarCidadePorNome(sedeNome);
 
@@ -102,8 +101,7 @@ public class Main {
                         break;
                     case 3:
                         System.out.print("Informe o nome da cidade sede: ");
-                        input.nextLine(); // Consumir a quebra de linha
-                        String sedeRecomendacaoNome = input.nextLine();
+                        String sedeRecomendacaoNome = sc.nextLine();
 
                         Cidade cidadeSedeRecomendacao = grafo.buscarCidadePorNome(sedeRecomendacaoNome);
 
@@ -124,8 +122,7 @@ public class Main {
                         break;
                     case 4:
                         System.out.print("Informe o nome da cidade sede: ");
-                        input.nextLine(); // Consumir a quebra de linha
-                        String sedeRotaNome = input.nextLine();
+                        String sedeRotaNome = sc.nextLine();
 
                         Cidade cidadeSedeRota = grafo.buscarCidadePorNome(sedeRotaNome);
 
@@ -154,7 +151,7 @@ public class Main {
 
             // Feche os Scanners
             scanner.close();
-            input.close();
+            sc.close();
         } catch (FileNotFoundException e) {
             System.err.println("Arquivo não encontrado: " + arquivoEntrada);
         }
