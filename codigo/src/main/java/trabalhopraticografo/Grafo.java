@@ -172,10 +172,8 @@ public class Grafo {
             throw new IllegalArgumentException("Nome da cidade não pode ser nulo.");
         }
     
-        String nomeLowerCase = nome.toLowerCase(); // Converter o nome de entrada para minúsculas
-    
         for (Cidade cidade : cidades) {
-            if (cidade.getNome().equalsIgnoreCase(nomeLowerCase)) {
+            if (cidade.getNome().equalsIgnoreCase(nome)) {
                 return cidade;
             }
         }
