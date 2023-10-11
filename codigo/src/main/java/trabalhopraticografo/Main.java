@@ -31,6 +31,7 @@ public class Main {
                     int peso;
                     try {
                         peso = Integer.parseInt(infoConexao[1].replace("(", "").replace(")", "").trim());
+                    System.out.println(peso);
                     } catch (NumberFormatException e) {
                         System.err.println("Erro ao converter peso para número inteiro: " + infoConexao[1]);
                         continue; // Pule esta iteração do loop e continue com a próxima conexão
@@ -40,7 +41,9 @@ public class Main {
                     Aresta aresta = new Aresta(cidadeOrigem, new Cidade(nomeCidadeDestino), peso);
                     grafo.adicionarAresta(aresta);
                 }
+
             }
+            scanner.close();
 
             // Menu de operações
             Scanner sc = new Scanner(System.in);
