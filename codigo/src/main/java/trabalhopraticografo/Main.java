@@ -60,9 +60,9 @@ public class Main {
                 switch (escolha) {
                     case 1:
                         System.out.print("Informe o nome da cidade de origem: ");
-                        String origemNome = sc.nextLine();
+                        String origemNome = sc.nextLine().toLowerCase(); // Converter para letras minúsculas
                         System.out.print("Informe o nome da cidade de destino: ");
-                        String destinoNome = sc.nextLine();
+                        String destinoNome = sc.nextLine().toLowerCase(); // Converter para letras minúsculas
 
                         Cidade origem = grafo.buscarCidadePorNome(origemNome);
                         Cidade destino = grafo.buscarCidadePorNome(destinoNome);
@@ -80,7 +80,7 @@ public class Main {
                         break;
                     case 2:
                         System.out.print("Informe o nome da cidade sede: ");
-                        String sedeNome = sc.nextLine();
+                        String sedeNome = sc.nextLine().toLowerCase(); // Converter para letras minúsculas
 
                         Cidade cidadeSedeInacessivel = grafo.buscarCidadePorNome(sedeNome);
 
@@ -101,7 +101,7 @@ public class Main {
                         break;
                     case 3:
                         System.out.print("Informe o nome da cidade sede: ");
-                        String sedeRecomendacaoNome = sc.nextLine();
+                        String sedeRecomendacaoNome = sc.nextLine().toLowerCase(); // Converter para letras minúsculas
 
                         Cidade cidadeSedeRecomendacao = grafo.buscarCidadePorNome(sedeRecomendacaoNome);
 
@@ -122,7 +122,7 @@ public class Main {
                         break;
                     case 4:
                         System.out.print("Informe o nome da cidade sede: ");
-                        String sedeRotaNome = sc.nextLine();
+                        String sedeRotaNome = sc.nextLine().toLowerCase(); // Converter para letras minúsculas
 
                         Cidade cidadeSedeRota = grafo.buscarCidadePorNome(sedeRotaNome);
 
