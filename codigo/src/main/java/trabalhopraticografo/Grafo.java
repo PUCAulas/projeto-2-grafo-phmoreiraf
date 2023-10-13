@@ -1,6 +1,16 @@
 package trabalhopraticografo;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
 
 public class Grafo {
 
@@ -234,5 +244,39 @@ public class Grafo {
         return cidadeMaisProximaNaoVisitada;
     }
     
+    public boolean isHamiltoniano() {
+        if (cidades.isEmpty()) {
+            return false; // O grafo não possui cidades.
+        }
 
-}
+        // Comece com a primeira cidade como ponto de partida
+        Cidade cidadeInicial = cidades.get(0);
+
+        // Inicie a busca por um ciclo Hamiltoniano a partir da cidade inicial
+        return isHamiltonianoRecursivo(cidadeInicial, cidadeInicial, new HashSet<>(), 1);
+    }
+
+    private boolean isHamiltonianoRecursivo(Cidade cidadeAtual, Cidade cidadeInicial, Set<Cidade> visitadas, int contador) {
+        visitadas.add(cidadeAtual);
+
+        if (contador == cidades.size() && cidadeAtual.vizinhos.containsKey(cidadeInicial)) {
+            // Encontrou um ciclo Hamiltoniano
+            return true;
+        }
+
+        for (Cidade vizinho : cidadeAtual.vizinhos.keySet()) {
+            if (!visitadas.contains(vizinho)) {
+                if (isHamiltonianoRecursivo(vizinho, cidadeInicial, new HashSet<>(visitadas), contador + 1)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+	
+	}
+    
+
+

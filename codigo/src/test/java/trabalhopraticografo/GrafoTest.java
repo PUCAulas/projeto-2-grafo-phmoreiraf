@@ -64,4 +64,27 @@ public class GrafoTest {
         assertNull(grafo.encontrarCidadeMaisProxima(cidadeA));
         assertEquals(null, grafo.encontrarCidadeMaisProxima(cidadeB));
     }
+    
+    @Test
+    public void testGrafoHamiltoniano() {
+        Grafo grafo = new Grafo();
+
+        // Adicione as cidades e conexões no grafo (ajuste de acordo com o grafo real).
+        Cidade cidadeA = new Cidade("A");
+        Cidade cidadeB = new Cidade("B");
+        Cidade cidadeC = new Cidade("C");
+        Cidade cidadeD = new Cidade("D");
+
+        cidadeA.adicionarVizinho(cidadeB, 1);
+        cidadeB.adicionarVizinho(cidadeC, 1);
+        cidadeC.adicionarVizinho(cidadeD, 1);
+        cidadeD.adicionarVizinho(cidadeA, 1);
+
+        grafo.adicionarCidade(cidadeA);
+        grafo.adicionarCidade(cidadeB);
+        grafo.adicionarCidade(cidadeC);
+        grafo.adicionarCidade(cidadeD);
+
+        assertTrue(grafo.isHamiltoniano());
+    }
 }
