@@ -9,13 +9,13 @@ public class BFS {
         this.grafo = grafo;
     }
 
-    public List<Cidade> buscaEmLargura(Cidade cidadeOrigem) {
+    public List<Cidade> buscaEmLargura(Cidade origemBFS) {
         List<Cidade> resultadoBFS = new ArrayList<>();
         Queue<Cidade> fila = new LinkedList<>();
         Set<Cidade> visitadas = new HashSet<>();
 
-        fila.offer(cidadeOrigem);
-        visitadas.add(cidadeOrigem);
+        fila.offer(origemBFS);
+        visitadas.add(origemBFS);
 
         while (!fila.isEmpty()) {
             Cidade atual = fila.poll();

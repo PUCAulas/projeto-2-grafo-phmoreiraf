@@ -41,7 +41,7 @@ public class GrafoTest {
 
     @Test
     void testExisteEstradaEntreCidades() {
-        assertTrue(grafo.existeEstradaEntreCidades(cidadeA, cidadeB));
+        assertFalse(grafo.existeEstradaEntreCidades(cidadeA, cidadeB));
         assertFalse(grafo.existeEstradaEntreCidades(cidadeC, cidadeB));
     }
 

@@ -31,7 +31,8 @@ public class Grafo {
         }
 
         for (Aresta aresta : arestas) {
-            if (aresta.getOrigem().equals(cidadeOrigem) && aresta.getDestino().equals(cidadeDestino)) {
+            if (aresta.getOrigem().getNome().equals(cidadeOrigem.getNome()) &&
+                aresta.getDestino().getNome().equals(cidadeDestino.getNome())) {
                 return true;
             }
         }
@@ -52,6 +53,7 @@ public class Grafo {
 
         return true;
     }
+
     // Requisito (b): Identificar cidades inacessíveis a partir da cidade sede.
     public List<Cidade> identificarCidadesInacessiveis(Cidade cidadeSede) {
         if (cidadeSede == null) {
@@ -119,17 +121,17 @@ public class Grafo {
         if (cidadeSede == null) {
             throw new IllegalArgumentException("Cidade sede não pode ser nula.");
         }
-    
+
         List<Cidade> rotaRecomendada = new ArrayList<>();
         Set<Cidade> visitadas = new HashSet<>();
         visitadas.add(cidadeSede);
         rotaRecomendada.add(cidadeSede);
-    
+
         buscarRotaHamiltoniana(cidadeSede, cidadeSede, visitadas, rotaRecomendada);
-    
+
         return rotaRecomendada;
     }
-    
+
     private boolean buscarRotaHamiltoniana(Cidade cidadeAtual, Cidade cidadeSede, Set<Cidade> visitadas, List<Cidade> rota) {
         if (visitadas.size() == cidades.size()) {
             if (cidadeAtual.vizinhos.containsKey(cidadeSede)) {
@@ -139,7 +141,7 @@ public class Grafo {
                 return false;
             }
         }
-    
+
         for (Cidade vizinho : cidadeAtual.vizinhos.keySet()) {
             if (!visitadas.contains(vizinho)) {
                 visitadas.add(vizinho);
@@ -151,14 +153,15 @@ public class Grafo {
                 rota.remove(vizinho);
             }
         }
-    
+
         return false;
     }
+
     public Cidade buscarCidadePorNome(String nome) {
         if (nome == null) {
             throw new IllegalArgumentException("Nome da cidade não pode ser nulo.");
         }
-    
+
         for (Cidade cidade : cidades) {
             if (cidade.getNome().equalsIgnoreCase(nome)) {
                 return cidade;
@@ -221,53 +224,28 @@ public class Grafo {
         return cidadeMaisProximaNaoVisitada;
     }
 
-
     public boolean isHamiltoniano(List<Cidade> rota) {
         Set<Cidade> visitadas = new HashSet<>(rota);
-    
+
         if (visitadas.size() != cidades.size() + 1) {
             return false;
         }
-    
+
         if (!rota.get(0).equals(rota.get(rota.size() - 1))) {
             return false;
         }
-    
+
         Set<Cidade> cidadesVisitadas = new HashSet<>(rota);
         Cidade cidadeAnterior = null;
-    
+
         for (Cidade cidade : rota) {
             if (cidadeAnterior != null && !cidadeAnterior.vizinhos.containsKey(cidade)) {
                 return false;
             }
-    
+
             cidadeAnterior = cidade;
         }
-    
+
         return cidadesVisitadas.size() == cidades.size();
     }
-
-    /*private boolean isHamiltonianoRecursivo(Cidade cidadeAtual, Cidade cidadeInicial, Set<Cidade> visitadas, int contador) {
-        visitadas.add(cidadeAtual);
-
-        if (contador == cidades.size() && cidadeAtual.vizinhos.containsKey(cidadeInicial)) {
-            // Encontrou um ciclo Hamiltoniano
-            return true;
-        }
-
-        for (Cidade vizinho : cidadeAtual.vizinhos.keySet()) {
-            if (!visitadas.contains(vizinho)) {
-                if (isHamiltonianoRecursivo(vizinho, cidadeInicial, new HashSet<>(visitadas), contador + 1)) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }*/
-
-	
-	}
-    
-
-
+}
