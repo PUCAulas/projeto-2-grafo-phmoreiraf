@@ -117,88 +117,44 @@ public class Grafo {
     // Requisito (d): Recomendar uma rota para um passageiro que deseja visitar
     // todas as cidades.
     public List<Cidade> recomendarRotaPassageiro(Cidade cidadeSede) {
-        List<Cidade> rotaPassageiro = new ArrayList<>();
-        if (cidades.size() <= 1) {
-            return rotaPassageiro; // Não é possível criar uma rota com apenas uma cidade
+        if (cidadeSede == null) {
+            throw new IllegalArgumentException("Cidade sede não pode ser nula.");
         }
-
-        List<Cidade> visitacao = recomendarVisitaTodasCidades(cidadeSede);
-        if (visitacao.isEmpty()) {
-            return rotaPassageiro; // Não é possível criar uma rota se nenhuma cidade for acessível
-        }
-
-        // Remover a cidade sede da lista, pois o passageiro já está na cidade sede
-        visitacao.remove(cidadeSede);
-
-        // Criar um grafo Hamiltoniano a partir das cidades visitadas
-        List<Cidade> grafoHamiltoniano = new ArrayList<>(visitacao);
-        grafoHamiltoniano.add(cidadeSede);
-
-        // Calcular a rota Hamiltoniana
-        List<Cidade> rotaHamiltoniana = encontrarRotaHamiltoniana(grafoHamiltoniano);
-
-        if (rotaHamiltoniana == null) {
-            System.out.println("Não é possível encontrar uma rota Hamiltoniana a partir da cidade sede.");
-            return rotaPassageiro;
-        }
-
-        // Ajustar a rota para começar na cidade sede
-        int indiceCidadeSede = rotaHamiltoniana.indexOf(cidadeSede);
-        if (indiceCidadeSede != -1) {
-            List<Cidade> rotaFinal = new ArrayList<>();
-            int tamanho = rotaHamiltoniana.size();
-
-            for (int i = 0; i < tamanho; i++) {
-                rotaFinal.add(rotaHamiltoniana.get((i + indiceCidadeSede) % tamanho));
-            }
-
-            return rotaFinal;
-        }
-
-        return rotaPassageiro;
-    }
-
-    private List<Cidade> encontrarRotaHamiltoniana(List<Cidade> grafo) {
-        int totalCidades = grafo.size();
-        List<Cidade> rotaAtual = new ArrayList<>();
+    
+        List<Cidade> rotaRecomendada = new ArrayList<>();
         Set<Cidade> visitadas = new HashSet<>();
-
-        rotaAtual.add(grafo.get(0));
-        visitadas.add(grafo.get(0));
-
-        boolean encontrouRota = encontrarRotaHamiltonianaRecursiva(grafo, rotaAtual, visitadas, totalCidades);
-
-        if (encontrouRota) {
-            return rotaAtual;
-        } else {
-            return null;
-        }
+        visitadas.add(cidadeSede);
+        rotaRecomendada.add(cidadeSede);
+    
+        buscarRotaHamiltoniana(cidadeSede, cidadeSede, visitadas, rotaRecomendada);
+    
+        return rotaRecomendada;
     }
-
-    private boolean encontrarRotaHamiltonianaRecursiva(List<Cidade> grafo, List<Cidade> rotaAtual, Set<Cidade> visitadas, int totalCidades) {
-        if (rotaAtual.size() == totalCidades) {
-            // Todas as cidades foram visitadas
-            return true;
+    
+    private boolean buscarRotaHamiltoniana(Cidade cidadeAtual, Cidade cidadeSede, Set<Cidade> visitadas, List<Cidade> rota) {
+        if (visitadas.size() == cidades.size()) {
+            if (cidadeAtual.vizinhos.containsKey(cidadeSede)) {
+                rota.add(cidadeSede); // Retornar à cidade sede para fechar o ciclo
+                return true; // Encontrou uma rota Hamiltoniana
+            } else {
+                return false;
+            }
         }
-
-        Cidade cidadeAtual = rotaAtual.get(rotaAtual.size() - 1);
+    
         for (Cidade vizinho : cidadeAtual.vizinhos.keySet()) {
             if (!visitadas.contains(vizinho)) {
-                rotaAtual.add(vizinho);
                 visitadas.add(vizinho);
-
-                if (encontrarRotaHamiltonianaRecursiva(grafo, rotaAtual, visitadas, totalCidades)) {
+                rota.add(vizinho);
+                if (buscarRotaHamiltoniana(vizinho, cidadeSede, visitadas, rota)) {
                     return true;
                 }
-
-                rotaAtual.remove(rotaAtual.size() - 1);
                 visitadas.remove(vizinho);
+                rota.remove(vizinho);
             }
         }
-
+    
         return false;
     }
-
     public Cidade buscarCidadePorNome(String nome) {
         if (nome == null) {
             throw new IllegalArgumentException("Nome da cidade não pode ser nulo.");
@@ -267,19 +223,32 @@ public class Grafo {
     }
 
 
-    public boolean isHamiltoniano() {
-        if (cidades.isEmpty()) {
-            return false; // O grafo não possui cidades.
+    public boolean isHamiltoniano(List<Cidade> rota) {
+        Set<Cidade> visitadas = new HashSet<>(rota);
+    
+        if (visitadas.size() != cidades.size() + 1) {
+            return false;
         }
-
-        // Comece com a primeira cidade como ponto de partida
-        Cidade cidadeInicial = cidades.get(0);
-
-        // Inicie a busca por um ciclo Hamiltoniano a partir da cidade inicial
-        return isHamiltonianoRecursivo(cidadeInicial, cidadeInicial, new HashSet<>(), 1);
+    
+        if (!rota.get(0).equals(rota.get(rota.size() - 1))) {
+            return false;
+        }
+    
+        Set<Cidade> cidadesVisitadas = new HashSet<>(rota);
+        Cidade cidadeAnterior = null;
+    
+        for (Cidade cidade : rota) {
+            if (cidadeAnterior != null && !cidadeAnterior.vizinhos.containsKey(cidade)) {
+                return false;
+            }
+    
+            cidadeAnterior = cidade;
+        }
+    
+        return cidadesVisitadas.size() == cidades.size();
     }
 
-    private boolean isHamiltonianoRecursivo(Cidade cidadeAtual, Cidade cidadeInicial, Set<Cidade> visitadas, int contador) {
+    /*private boolean isHamiltonianoRecursivo(Cidade cidadeAtual, Cidade cidadeInicial, Set<Cidade> visitadas, int contador) {
         visitadas.add(cidadeAtual);
 
         if (contador == cidades.size() && cidadeAtual.vizinhos.containsKey(cidadeInicial)) {
@@ -296,7 +265,7 @@ public class Grafo {
         }
 
         return false;
-    }
+    }*/
 
 	
 	}
