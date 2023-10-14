@@ -38,7 +38,6 @@ public class Main {
                     int peso;
                     try {
                         peso = Integer.parseInt(infoConexao[1].trim());
-                        //System.out.println(peso);
                     } catch (NumberFormatException e) {
                         System.err.println("Erro ao converter peso para número inteiro: " + infoConexao[1]);
                         continue; // Pule esta iteração do loop e continue com a próxima conexão
@@ -56,94 +55,83 @@ public class Main {
             int escolha;
 
             do {
-                System.out.println("\nEscolha uma operação:");
-                System.out.println("1. Verificar se existe estrada entre cidades");
-                System.out.println("2. Identificar cidades inacessíveis");
-                System.out.println("3. Recomendar visita a todas as cidades");
-                System.out.println("4. Recomendar rota para um passageiro");
+                System.out.println("Escolha uma opção:");
+                System.out.println("1 - Verificar existência de estrada entre cidades.");
+                System.out.println("2 - Identificar cidades inacessíveis a partir da cidade sede.");
+                System.out.println("3 - Recomendar visitação a todas as cidades a partir da cidade sede.");
+                System.out.println("4 - Recomendar rota para um passageiro a partir da cidade sede.");
                 System.out.println("5. Sair");
-                System.out.print("Escolha: ");
+                System.out.print("Opção: ");
                 escolha = sc.nextInt();
-                sc.nextLine();
 
                 switch (escolha) {
                     case 1:
-                        System.out.print("Informe o nome da cidade de origem: ");
-                        String origemNome = sc.nextLine().toLowerCase(); // Converter para letras minúsculas
-                        System.out.print("Informe o nome da cidade de destino: ");
-                        String destinoNome = sc.nextLine().toLowerCase(); // Converter para letras minúsculas
+                        // Requisito (a): Verificar se existe estrada de qualquer cidade para qualquer outra.
+                        System.out.println("Digite o nome da cidade de origem:");
+                        String origem = scanner.next().toLowerCase();
+                        System.out.println("Digite o nome da cidade de destino:");
+                        String destino = scanner.next().toLowerCase();
 
-                        Cidade origem = grafo.buscarCidadePorNome(origemNome);
-                        Cidade destino = grafo.buscarCidadePorNome(destinoNome);
+                        Cidade cidadeOrigem = grafo.buscarCidadePorNome(origem);
+                        Cidade cidadeDestino = grafo.buscarCidadePorNome(destino);
 
-                        if (origem != null && destino != null) {
-                            boolean existeEstrada = grafo.existeEstradaEntreCidades(origem, destino);
-                            if (existeEstrada) {
-                                System.out.println("Existe estrada entre " + origemNome + " e " + destinoNome);
+                        if (cidadeOrigem != null && cidadeDestino != null) {
+                            if (grafo.existeEstradaEntreCidades(cidadeOrigem, cidadeDestino)) {
+                                System.out.println("Existe uma estrada entre " + cidadeOrigem.getNome() + " e " + cidadeDestino.getNome());
                             } else {
-                                System.out.println("Não existe estrada entre " + origemNome + " e " + destinoNome);
+                                System.out.println("Não existe uma estrada entre " + cidadeOrigem.getNome() + " e " + cidadeDestino.getNome());
                             }
                         } else {
-                            System.out.println("Cidades não encontradas.");
+                            System.out.println("Cidade de origem ou cidade de destino não encontrada.");
                         }
                         break;
                     case 2:
-                        System.out.print("Informe o nome da cidade sede: ");
-                        String sedeNome = sc.nextLine().toLowerCase(); // Converter para letras minúsculas
+                        // Requisito (b): Identificar cidades inacessíveis a partir da cidade sede.
+                        System.out.println("Digite o nome da cidade sede:");
+                        String sede = scanner.next().toLowerCase();
+                        Cidade cidadeSede = grafo.buscarCidadePorNome(sede);
 
-                        Cidade cidadeSedeInacessivel = grafo.buscarCidadePorNome(sedeNome);
-
-                        if (cidadeSedeInacessivel != null) {
-                            List<Cidade> cidadesInacessiveis = grafo
-                                    .identificarCidadesInacessiveis(cidadeSedeInacessivel);
-                            if (!cidadesInacessiveis.isEmpty()) {
-                                System.out.println("Cidades inacessíveis a partir de " + sedeNome + ": ");
-                                for (Cidade cidadeInacessivel : cidadesInacessiveis) {
-                                    System.out.println(cidadeInacessivel.getNome());
+                        if (cidadeSede != null) {
+                            List<Cidade> cidadesInacessiveis = grafo.identificarCidadesInacessiveis(cidadeSede);
+                            if (cidadesInacessiveis.size() > 0) {
+                                System.out.println("Cidades inacessíveis a partir de " + cidadeSede.getNome() + ":");
+                                for (Cidade inacessivel : cidadesInacessiveis) {
+                                    System.out.println("- " + inacessivel.getNome());
                                 }
                             } else {
-                                System.out.println("Todas as cidades são acessíveis a partir de " + sedeNome);
+                                System.out.println("Todas as cidades são acessíveis a partir de " + cidadeSede.getNome());
                             }
                         } else {
                             System.out.println("Cidade sede não encontrada.");
                         }
                         break;
                     case 3:
-                        System.out.print("Informe o nome da cidade sede: ");
-                        String sedeRecomendacaoNome = sc.nextLine().toLowerCase(); // Converter para letras minúsculas
+                        // Requisito (c): Recomendar visitação a todas as cidades a partir da cidade sede.
+                        System.out.println("Digite o nome da cidade sede:");
+                        String cidadeSedeRecomendacao = scanner.next().toLowerCase();
+                        Cidade cidadeSedeRecomendacaoObj = grafo.buscarCidadePorNome(cidadeSedeRecomendacao);
 
-                        Cidade cidadeSedeRecomendacao = grafo.buscarCidadePorNome(sedeRecomendacaoNome);
-
-                        if (cidadeSedeRecomendacao != null) {
-                            List<Cidade> recomendacaoVisita = grafo
-                                    .recomendarVisitaTodasCidades(cidadeSedeRecomendacao);
-                            if (!recomendacaoVisita.isEmpty()) {
-                                System.out.println("Recomendação de visitação em todas as cidades: ");
-                                for (Cidade cidadeVisita : recomendacaoVisita) {
-                                    System.out.println(cidadeVisita.getNome());
-                                }
-                            } else {
-                                System.out.println("Não foi possível recomendar visitação.");
+                        if (cidadeSedeRecomendacaoObj != null) {
+                            List<Cidade> recomendacaoVisita = grafo.recomendarVisitaTodasCidades(cidadeSedeRecomendacaoObj);
+                            System.out.println("Recomendação de visitação a partir de " + cidadeSedeRecomendacaoObj.getNome() + ":");
+                            for (Cidade cidade : recomendacaoVisita) {
+                                System.out.println("- " + cidade.getNome());
                             }
                         } else {
                             System.out.println("Cidade sede não encontrada.");
                         }
                         break;
                     case 4:
-                        System.out.print("Informe o nome da cidade sede: ");
-                        String sedeRotaNome = sc.nextLine().toLowerCase(); // Converter para letras minúsculas
+                        // Requisito (d): Recomendar rota para um passageiro a partir da cidade sede.
+                        System.out.println("Digite o nome da cidade sede:");
+                        String cidadeSedeRota = scanner.next().toLowerCase();
+                        Cidade cidadeSedeRotaObj = grafo.buscarCidadePorNome(cidadeSedeRota);
 
-                        Cidade cidadeSedeRota = grafo.buscarCidadePorNome(sedeRotaNome);
-
-                        if (cidadeSedeRota != null) {
-                            List<Cidade> rotaPassageiro = grafo.recomendarRotaPassageiro(cidadeSedeRota);
-                            if (!rotaPassageiro.isEmpty()) {
-                                System.out.println("Rota recomendada para o passageiro: ");
-                                for (Cidade cidadeRota : rotaPassageiro) {
-                                    System.out.println(cidadeRota.getNome());
-                                }
-                            } else {
-                                System.out.println("Não foi possível recomendar uma rota.");
+                        if (cidadeSedeRotaObj != null) {
+                            List<Cidade> rotaPassageiro = grafo.recomendarRotaPassageiro(cidadeSedeRotaObj);
+                            System.out.println("Rota recomendada para o passageiro a partir de " + cidadeSedeRotaObj.getNome() + ":");
+                            for (Cidade cidade : rotaPassageiro) {
+                                System.out.println("- " + cidade.getNome());
                             }
                         } else {
                             System.out.println("Cidade sede não encontrada.");
@@ -153,19 +141,15 @@ public class Main {
                         System.out.println("Saindo do programa.");
                         break;
                     default:
-                        System.out.println("Escolha inválida. Tente novamente.");
-                        break;
+                        System.out.println("Opção inválida. Digite um número de 1 a 5.");
                 }
             } while (escolha != 5);
 
-            // Feche os Scanners
-            scanner.close();
             sc.close();
+
         } catch (FileNotFoundException e) {
             System.err.println("Arquivo não encontrado: " + arquivoEntrada);
         }
     }
-
 }
-
 

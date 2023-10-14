@@ -2,7 +2,7 @@ package trabalhopraticografo;
 
 import java.util.*;
 
-class BFS {
+public class BFS {
     private Grafo grafo;
 
     public BFS(Grafo grafo) {

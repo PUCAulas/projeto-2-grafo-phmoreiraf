@@ -19,6 +19,14 @@ public class Cidade {
         vizinhos.put(cidade, distancia);
     }
 
+      public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setVizinhos(Map<Cidade, Integer> vizinhos) {
+        this.vizinhos = vizinhos;
+    }
+
     public Map<Cidade, Integer> getVizinhos() {
         return vizinhos;
     }
