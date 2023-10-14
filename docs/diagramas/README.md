@@ -1,2 +1,4 @@
 # Diagramas de classe
-Coloque aqui todas as versões do seu diagrama de classes. Cada versão deve começar com um número de dois dígitos, na ordem crescente.
+[Diagrama de Classes: 1.0](./diagramaClasses.png)
+
+[Link do Diagrama Atualizado](https://lucid.app/lucidchart/8e3f0f1b-c515-45e4-8a91-3e323d0c63ea/edit?viewport_loc=-419%2C339%2C2037%2C846%2C0_0&invitationId=inv_232e2e05-50a5-4c1e-908c-c85398f15790)
