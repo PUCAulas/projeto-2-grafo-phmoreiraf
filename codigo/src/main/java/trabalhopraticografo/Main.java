@@ -7,7 +7,7 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         // Nome do arquivo de entrada
-        String arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/registro copy.txt";
+        String arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/registro.txt";
         try {
             Scanner scanner = new Scanner(new File(arquivoEntrada));
             Grafo grafo = new Grafo();
@@ -32,7 +32,6 @@ public class Main {
                         System.err.println("Formato de conexão inválido: " + conexao);
                         continue;
                     }
-
                     String nomeCidadeDestino = infoConexao[0].trim();
 
                     int peso;
@@ -43,10 +42,10 @@ public class Main {
                         continue; // Pule esta iteração do loop e continue com a próxima conexão
                     }
 
-                    // Criar uma aresta e adicionar ao grafo
                     Aresta aresta = new Aresta(cidadeOrigem, new Cidade(nomeCidadeDestino), peso);
                     grafo.adicionarAresta(aresta);
                 }
+                
             }
             scanner.close();
 
@@ -68,9 +67,11 @@ public class Main {
                     case 1:
                         // Requisito (a): Verificar se existe estrada de qualquer cidade para qualquer outra.
                         System.out.println("Digite o nome da cidade de origem:");
-                        String origem = scanner.next().toLowerCase();
+                        //String origem = sc.nextLine().toLowerCase();
+                        String origem = "paris";
                         System.out.println("Digite o nome da cidade de destino:");
-                        String destino = scanner.next().toLowerCase();
+                        //String destino = sc.nextLine().toLowerCase();
+                        String destino = "londres";
 
                         Cidade cidadeOrigem = grafo.buscarCidadePorNome(origem);
                         Cidade cidadeDestino = grafo.buscarCidadePorNome(destino);
@@ -88,7 +89,8 @@ public class Main {
                     case 2:
                         // Requisito (b): Identificar cidades inacessíveis a partir da cidade sede.
                         System.out.println("Digite o nome da cidade sede:");
-                        String sede = scanner.next().toLowerCase();
+                        //String sede = sc.nextLine().toLowerCase();
+                        String sede = "paris";
                         Cidade cidadeSede = grafo.buscarCidadePorNome(sede);
 
                         if (cidadeSede != null) {
@@ -108,7 +110,7 @@ public class Main {
                     case 3:
                         // Requisito (c): Recomendar visitação a todas as cidades a partir da cidade sede.
                         System.out.println("Digite o nome da cidade sede:");
-                        String cidadeSedeRecomendacao = scanner.next().toLowerCase();
+                        String cidadeSedeRecomendacao = sc.nextLine().toLowerCase();
                         Cidade cidadeSedeRecomendacaoObj = grafo.buscarCidadePorNome(cidadeSedeRecomendacao);
 
                         if (cidadeSedeRecomendacaoObj != null) {
@@ -124,7 +126,7 @@ public class Main {
                     case 4:
                         // Requisito (d): Recomendar rota para um passageiro a partir da cidade sede.
                         System.out.println("Digite o nome da cidade sede:");
-                        String cidadeSedeRota = scanner.next().toLowerCase();
+                        String cidadeSedeRota = sc.nextLine().toLowerCase();
                         Cidade cidadeSedeRotaObj = grafo.buscarCidadePorNome(cidadeSedeRota);
 
                         if (cidadeSedeRotaObj != null) {
@@ -143,13 +145,14 @@ public class Main {
                     default:
                         System.out.println("Opção inválida. Digite um número de 1 a 5.");
                 }
+                
             } while (escolha != 5);
-
             sc.close();
-
         } catch (FileNotFoundException e) {
             System.err.println("Arquivo não encontrado: " + arquivoEntrada);
         }
+
+        
     }
 }
 

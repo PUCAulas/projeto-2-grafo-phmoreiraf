@@ -29,30 +29,29 @@ public class Grafo {
         if (cidadeOrigem == null || cidadeDestino == null) {
             throw new IllegalArgumentException("Cidades de origem e destino não podem ser nulas.");
         }
-        Set<Cidade> visitadas = new HashSet<>();
-        Queue<Cidade> fila = new LinkedList<>();
-    
-        fila.offer(cidadeOrigem);
-        visitadas.add(cidadeOrigem);
-    
-        while (!fila.isEmpty()) {
-            Cidade atual = fila.poll();
-    
-            if (atual.equals(cidadeDestino)) {
-                return true; // Existe estrada entre as cidades
+
+        for (Aresta aresta : arestas) {
+            if (aresta.getOrigem().equals(cidadeOrigem) && aresta.getDestino().equals(cidadeDestino)) {
+                return true;
             }
-    
-            for (Cidade vizinho : atual.vizinhos.keySet()) {
-                if (!visitadas.contains(vizinho)) {
-                    fila.offer(vizinho);
-                    visitadas.add(vizinho);
+        }
+
+        return false;
+    }
+
+    public boolean existeEstradaDeQualquerParaQualquer() {
+        List<Cidade> cidades = getCidades();
+
+        for (Cidade cidadeOrigem : cidades) {
+            for (Cidade cidadeDestino : cidades) {
+                if (cidadeOrigem != cidadeDestino && !existeEstradaEntreCidades(cidadeOrigem, cidadeDestino)) {
+                    return false;
                 }
             }
         }
-    
-        return false; // Não existe estrada entre as cidades
-    }
 
+        return true;
+    }
     // Requisito (b): Identificar cidades inacessíveis a partir da cidade sede.
     public List<Cidade> identificarCidadesInacessiveis(Cidade cidadeSede) {
         if (cidadeSede == null) {
