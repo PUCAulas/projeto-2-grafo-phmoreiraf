@@ -28,7 +28,10 @@ public class Grafo {
 
     // Requisito (a): Verificar se existe estrada de qualquer cidade para qualquer
     public boolean existeEstradaEntreCidades(Cidade origem, Cidade destino) {
-        return origem.getVizinhos().containsKey(destino);
+        if (origem != null && destino != null) {
+            return origem.getVizinhos().containsKey(destino);
+        }
+        return false;
     }
 
     public boolean existeEstradaDeQualquerParaQualquer() {
@@ -47,6 +50,10 @@ public class Grafo {
 
     // Requisito (b): Identificar cidades inacessíveis a partir da cidade sede. BFS
     public List<Cidade> cidadesInacessiveis(Cidade cidadeSede) {
+        if (cidadeSede == null) {
+            return Collections.emptyList();
+        }
+
         Set<Cidade> visitados = new HashSet<>();
         Queue<Cidade> fila = new LinkedList<>();
 
@@ -75,6 +82,10 @@ public class Grafo {
 
     // Requisito (c): Recomendar visitação em todas as cidades e estradas.
     public List<Cidade> recomendarVisitaTodasCidades(Cidade origem) {
+        if (origem == null || !cidades.contains(origem)) {
+            return Collections.emptyList();
+        }
+
         Map<Cidade, Integer> distancias = new HashMap<>();
         Map<Cidade, Cidade> anteriores = new HashMap<>();
         PriorityQueue<Cidade> fila = new PriorityQueue<>(Comparator.comparingInt(distancias::get));
@@ -115,14 +126,16 @@ public class Grafo {
 
     public List<Cidade> cicloHamiltoniano() {
         List<Cidade> solucao = new ArrayList<>();
+
         if (cidades.size() > 0) {
             solucao.add(cidades.get(0));
+
+            if (cicloHamiltoniano(solucao, cidades.get(0))) {
+                return solucao;
+            }
         }
-        if (cicloHamiltoniano(solucao, cidades.get(0))) {
-            return solucao;
-        } else {
-            return null;
-        }
+
+        return null;
     }
 
     private boolean cicloHamiltoniano(List<Cidade> solucao, Cidade cidadeAtual) {
