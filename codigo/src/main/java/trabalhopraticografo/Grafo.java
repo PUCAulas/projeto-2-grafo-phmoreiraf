@@ -18,6 +18,8 @@ public class Grafo {
 
     public void adicionarAresta(Aresta aresta) {
         arestas.add(aresta);
+        aresta.getOrigem().adicionarVizinho(aresta.getDestino(), aresta.getPeso());
+        aresta.getDestino().adicionarVizinho(aresta.getOrigem(), aresta.getPeso());
     }
 
     public List<Cidade> getCidades() {
@@ -25,19 +27,8 @@ public class Grafo {
     }
 
     // Requisito (a): Verificar se existe estrada de qualquer cidade para qualquer
-    public boolean existeEstradaEntreCidades(Cidade cidadeOrigem, Cidade cidadeDestino) {
-        if (cidadeOrigem == null || cidadeDestino == null) {
-            throw new IllegalArgumentException("Cidades de origem e destino não podem ser nulas.");
-        }
-
-        for (Aresta aresta : arestas) {
-            if (aresta.getOrigem().getNome().equals(cidadeOrigem.getNome()) &&
-                aresta.getDestino().getNome().equals(cidadeDestino.getNome())) {
-                return true;
-            }
-        }
-
-        return false;
+    public boolean existeEstradaEntreCidades(Cidade origem, Cidade destino) {
+        return origem.getVizinhos().containsKey(destino);
     }
 
     public boolean existeEstradaDeQualquerParaQualquer() {
@@ -54,108 +45,147 @@ public class Grafo {
         return true;
     }
 
-    // Requisito (b): Identificar cidades inacessíveis a partir da cidade sede.
-    public List<Cidade> identificarCidadesInacessiveis(Cidade cidadeSede) {
-        if (cidadeSede == null) {
-            throw new IllegalArgumentException("Cidade sede não pode ser nula.");
-        }
-        List<Cidade> cidadesInacessiveis = new ArrayList<>();
-        Set<Cidade> visitadas = new HashSet<>();
+    // Requisito (b): Identificar cidades inacessíveis a partir da cidade sede. BFS
+    public List<Cidade> cidadesInacessiveis(Cidade cidadeSede) {
+        Set<Cidade> visitados = new HashSet<>();
         Queue<Cidade> fila = new LinkedList<>();
 
-        fila.offer(cidadeSede);
-        visitadas.add(cidadeSede);
+        fila.add(cidadeSede);
 
         while (!fila.isEmpty()) {
             Cidade atual = fila.poll();
+            visitados.add(atual);
 
-            for (Cidade vizinho : atual.vizinhos.keySet()) {
-                if (!visitadas.contains(vizinho)) {
-                    fila.offer(vizinho);
-                    visitadas.add(vizinho);
+            for (Cidade vizinho : atual.getVizinhos().keySet()) {
+                if (!visitados.contains(vizinho)) {
+                    fila.add(vizinho);
                 }
             }
         }
 
-        // Todas as cidades acessíveis foram visitadas. As inacessíveis estão na lista
-        // de não visitadas.
+        List<Cidade> inacessiveis = new ArrayList<>();
         for (Cidade cidade : cidades) {
-            if (!visitadas.contains(cidade)) {
-                cidadesInacessiveis.add(cidade);
+            if (!visitados.contains(cidade)) {
+                inacessiveis.add(cidade);
             }
         }
 
-        return cidadesInacessiveis;
+        return inacessiveis;
     }
 
     // Requisito (c): Recomendar visitação em todas as cidades e estradas.
-    public List<Cidade> recomendarVisitaTodasCidades(Cidade cidadeSede) {
-        if (cidadeSede == null) {
-            throw new IllegalArgumentException("Cidade sede não pode ser nula.");
-        }
-        List<Cidade> rotaRecomendada = new ArrayList<>();
-        Set<Cidade> visitadas = new HashSet<>();
-        Queue<Cidade> fila = new LinkedList<>();
+    public List<Cidade> recomendarVisitaTodasCidades(Cidade origem) {
+        Map<Cidade, Integer> distancias = new HashMap<>();
+        Map<Cidade, Cidade> anteriores = new HashMap<>();
+        PriorityQueue<Cidade> fila = new PriorityQueue<>(Comparator.comparingInt(distancias::get));
 
-        fila.offer(cidadeSede);
-        visitadas.add(cidadeSede);
+        for (Cidade cidade : cidades) {
+            if (cidade == origem) {
+                distancias.put(cidade, 0);
+            } else {
+                distancias.put(cidade, Integer.MAX_VALUE);
+            }
+            fila.add(cidade);
+        }
 
         while (!fila.isEmpty()) {
             Cidade atual = fila.poll();
-            rotaRecomendada.add(atual);
 
-            for (Cidade vizinho : atual.vizinhos.keySet()) {
-                if (!visitadas.contains(vizinho)) {
-                    fila.offer(vizinho);
-                    visitadas.add(vizinho);
+            for (Map.Entry<Cidade, Integer> vizinho : atual.getVizinhos().entrySet()) {
+                int distanciaAlternativa = distancias.get(atual) + vizinho.getValue();
+                if (distanciaAlternativa < distancias.get(vizinho.getKey())) {
+                    fila.remove(vizinho.getKey());
+                    distancias.put(vizinho.getKey(), distanciaAlternativa);
+                    anteriores.put(vizinho.getKey(), atual);
+                    fila.add(vizinho.getKey());
                 }
             }
         }
 
-        return rotaRecomendada;
+        List<Cidade> caminho = new ArrayList<>();
+        for (Cidade cidade : anteriores.keySet()) {
+            caminho.add(cidade);
+        }
+
+        return caminho;
     }
 
     // Requisito (d): Recomendar uma rota para um passageiro que deseja visitar
     // todas as cidades.
-    public List<Cidade> recomendarRotaPassageiro(Cidade cidadeSede) {
-        if (cidadeSede == null) {
-            throw new IllegalArgumentException("Cidade sede não pode ser nula.");
+
+    public List<Cidade> cicloHamiltoniano() {
+        List<Cidade> solucao = new ArrayList<>();
+        if (cidades.size() > 0) {
+            solucao.add(cidades.get(0));
         }
-
-        List<Cidade> rotaRecomendada = new ArrayList<>();
-        Set<Cidade> visitadas = new HashSet<>();
-        visitadas.add(cidadeSede);
-        rotaRecomendada.add(cidadeSede);
-
-        buscarRotaHamiltoniana(cidadeSede, cidadeSede, visitadas, rotaRecomendada);
-
-        return rotaRecomendada;
+        if (cicloHamiltoniano(solucao, cidades.get(0))) {
+            return solucao;
+        } else {
+            return null;
+        }
     }
 
-    private boolean buscarRotaHamiltoniana(Cidade cidadeAtual, Cidade cidadeSede, Set<Cidade> visitadas, List<Cidade> rota) {
-        if (visitadas.size() == cidades.size()) {
-            if (cidadeAtual.vizinhos.containsKey(cidadeSede)) {
-                rota.add(cidadeSede); // Retornar à cidade sede para fechar o ciclo
-                return true; // Encontrou uma rota Hamiltoniana
-            } else {
-                return false;
-            }
+    private boolean cicloHamiltoniano(List<Cidade> solucao, Cidade cidadeAtual) {
+        if (solucao.size() == cidades.size()) {
+            return cidadeAtual.getVizinhos().containsKey(solucao.get(0));
         }
 
-        for (Cidade vizinho : cidadeAtual.vizinhos.keySet()) {
-            if (!visitadas.contains(vizinho)) {
-                visitadas.add(vizinho);
-                rota.add(vizinho);
-                if (buscarRotaHamiltoniana(vizinho, cidadeSede, visitadas, rota)) {
+        for (Cidade vizinho : cidadeAtual.getVizinhos().keySet()) {
+            if (!solucao.contains(vizinho)) {
+                solucao.add(vizinho);
+
+                if (cicloHamiltoniano(solucao, vizinho)) {
                     return true;
                 }
-                visitadas.remove(vizinho);
-                rota.remove(vizinho);
+
+                solucao.remove(vizinho);
             }
         }
 
         return false;
     }
+
+    // public List<Cidade> recomendarRotaPassageiro(Cidade cidadeSede) {
+    // if (cidadeSede == null) {
+    // throw new IllegalArgumentException("Cidade sede não pode ser nula.");
+    // }
+
+    // List<Cidade> rotaRecomendada = new ArrayList<>();
+    // Set<Cidade> visitadas = new HashSet<>();
+    // visitadas.add(cidadeSede);
+    // rotaRecomendada.add(cidadeSede);
+
+    // buscarRotaHamiltoniana(cidadeSede, cidadeSede, visitadas, rotaRecomendada);
+
+    // return rotaRecomendada;
+    // }
+
+    // private boolean buscarRotaHamiltoniana(Cidade cidadeAtual, Cidade cidadeSede,
+    // Set<Cidade> visitadas,
+    // List<Cidade> rota) {
+    // if (visitadas.size() == cidades.size()) {
+    // if (cidadeAtual.vizinhos.containsKey(cidadeSede)) {
+    // rota.add(cidadeSede); // Retornar à cidade sede para fechar o ciclo
+    // return true; // Encontrou uma rota Hamiltoniana
+    // } else {
+    // return false;
+    // }
+    // }
+
+    // for (Cidade vizinho : cidadeAtual.vizinhos.keySet()) {
+    // if (!visitadas.contains(vizinho)) {
+    // visitadas.add(vizinho);
+    // rota.add(vizinho);
+    // if (buscarRotaHamiltoniana(vizinho, cidadeSede, visitadas, rota)) {
+    // return true;
+    // }
+    // visitadas.remove(vizinho);
+    // rota.remove(vizinho);
+    // }
+    // }
+
+    // return false;
+    // }
 
     public Cidade buscarCidadePorNome(String nome) {
         if (nome == null) {

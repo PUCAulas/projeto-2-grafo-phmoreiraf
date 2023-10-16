@@ -16,7 +16,6 @@ public class GrafoTest {
     private Cidade cidadeA;
     private Cidade cidadeB;
     private Cidade cidadeC;
-    private Cidade cidadeD;
 
     @BeforeEach
     void setUp() {
@@ -24,57 +23,53 @@ public class GrafoTest {
         cidadeA = new Cidade("Cidade A");
         cidadeB = new Cidade("Cidade B");
         cidadeC = new Cidade("Cidade C");
-        cidadeD = new Cidade("Cidade D");
+        grafo.adicionarCidade(cidadeA);
+        grafo.adicionarCidade(cidadeB);
+        grafo.adicionarCidade(cidadeC);
+        grafo.adicionarAresta(new Aresta(cidadeA, cidadeB, 1));
+        grafo.adicionarAresta(new Aresta(cidadeB, cidadeC, 1));
 
         // Adicione as conexões entre as cidades ao grafo
         cidadeA.adicionarVizinho(cidadeB, 10);
         cidadeA.adicionarVizinho(cidadeC, 15);
-        cidadeA.adicionarVizinho(cidadeD, 20);
         cidadeA.adicionarVizinho(cidadeC, 20);
         cidadeB.adicionarVizinho(cidadeC, 5);
 
         grafo.adicionarCidade(cidadeA);
         grafo.adicionarCidade(cidadeB);
         grafo.adicionarCidade(cidadeC);
-        grafo.adicionarCidade(cidadeD);
     }
 
     @Test
-    void testExisteEstradaEntreCidades() {
-        assertFalse(grafo.existeEstradaEntreCidades(cidadeA, cidadeB));
-        assertFalse(grafo.existeEstradaEntreCidades(cidadeC, cidadeB));
+    public void testExisteEstradaEntreCidades() {
+        assertTrue(grafo.existeEstradaEntreCidades(cidadeA, cidadeB));
+        assertTrue(grafo.existeEstradaEntreCidades(cidadeB, cidadeC));
+        assertTrue(grafo.existeEstradaEntreCidades(cidadeA, cidadeC));
     }
 
     @Test
-    void testIdentificarCidadesInacessiveis() {
-        assertEquals(0, grafo.identificarCidadesInacessiveis(cidadeA).size());
-        assertEquals(3, grafo.identificarCidadesInacessiveis(cidadeD).size());
+    public void testCidadesInacessiveis() {
+        List<Cidade> inacessiveis = grafo.cidadesInacessiveis(cidadeA);
+        assertEquals(0, inacessiveis.size());
     }
 
     @Test
-    void testRecomendarVisitaTodasCidades() {
-        assertEquals(grafo.getCidades().size(), grafo.recomendarVisitaTodasCidades(cidadeA).size());
+    public void testrecomendarVisitaTodasCidades() {
+        List<Cidade> caminhoMinimo = grafo.recomendarVisitaTodasCidades(cidadeA);
+        assertEquals(2, caminhoMinimo.size());
+        assertEquals(cidadeC.getNome(), caminhoMinimo.get(0).getNome());
+        assertEquals(cidadeB.getNome(), caminhoMinimo.get(1).getNome());
     }
 
-    /**
-     * 
-     */
     @Test
-    void testRecomendarRotaPassageiro() {
-        // Substitua as cidades de origem e destino pelos nomes corretos no seu grafo
-        Cidade cidadeOrigem = grafo.buscarCidadePorNome("Cidade A");
-        assertNotNull(cidadeOrigem);
+    public void testCicloHamiltoniano() {
+        List<Cidade> cicloHamiltoniano = grafo.cicloHamiltoniano();
+        assertNull(cicloHamiltoniano);
 
-        List<Cidade> rota = grafo.recomendarRotaPassageiro(cidadeOrigem);
-
-        assertNotNull(rota);
-
-        // Verifique se a rota é válida (deve visitar todas as cidades uma vez e voltar à origem)
-        assertEquals(cidadeOrigem, rota.get(0));
-        assertEquals(cidadeOrigem, rota.get(rota.size() - 1));
-
-        assertEquals(1, rota.size()); // Deve ter o mesmo número de cidades
-
+        grafo.adicionarAresta(new Aresta(cidadeA, cidadeC, 1));
+        cicloHamiltoniano = grafo.cicloHamiltoniano();
+        assertNotNull(cicloHamiltoniano);
+        assertEquals(3, cicloHamiltoniano.size());
     }
 
     @Test
@@ -82,41 +77,41 @@ public class GrafoTest {
         assertNull(grafo.encontrarCidadeMaisProxima(cidadeA));
         assertEquals(null, grafo.encontrarCidadeMaisProxima(cidadeB));
     }
-    
+
     @Test
     void testIsHamiltoniano() {
         Grafo grafo = new Grafo();
-    
+
         Cidade cidadeA = new Cidade("A");
         Cidade cidadeB = new Cidade("B");
         Cidade cidadeC = new Cidade("C");
         Cidade cidadeD = new Cidade("D");
-    
+
         cidadeA.adicionarVizinho(cidadeB, 1);
         cidadeB.adicionarVizinho(cidadeC, 1);
         cidadeC.adicionarVizinho(cidadeD, 1);
         cidadeD.adicionarVizinho(cidadeA, 1);
-    
+
         grafo.adicionarCidade(cidadeA);
         grafo.adicionarCidade(cidadeB);
         grafo.adicionarCidade(cidadeC);
         grafo.adicionarCidade(cidadeD);
-    
+
         List<Cidade> rotaHamiltoniana = new ArrayList<>();
         rotaHamiltoniana.add(cidadeA);
         rotaHamiltoniana.add(cidadeB);
         rotaHamiltoniana.add(cidadeC);
         rotaHamiltoniana.add(cidadeD);
         rotaHamiltoniana.add(cidadeA);
-    
+
         assertFalse(grafo.isHamiltoniano(rotaHamiltoniana));
-        
+
         List<Cidade> rotaNaoHamiltoniana = new ArrayList<>();
         rotaNaoHamiltoniana.add(cidadeA);
         rotaNaoHamiltoniana.add(cidadeB);
         rotaNaoHamiltoniana.add(cidadeD);
         rotaNaoHamiltoniana.add(cidadeA);
-    
+
         assertFalse(grafo.isHamiltoniano(rotaNaoHamiltoniana));
     }
 }

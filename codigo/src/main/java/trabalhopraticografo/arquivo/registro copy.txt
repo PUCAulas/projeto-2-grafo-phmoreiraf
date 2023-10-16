@@ -1,3 +1,0 @@
-Cidade do Cabo: Joanesburgo (1270), Nairobi (3900), Paris (8900)
-Joanesburgo: Cidade do Cabo (1270), Nairobi (4700), Mumbai (6500)
-Nairobi: Cidade do Cabo (3900), Joanesburgo (4700), Mumbai (4300)
