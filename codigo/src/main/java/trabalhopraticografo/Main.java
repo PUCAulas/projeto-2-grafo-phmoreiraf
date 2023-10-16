@@ -11,6 +11,7 @@ public class Main {
         Grafo grafo = new Grafo();
         BFS bfs = new BFS(grafo);
         Cidade cidadeOrigem;
+        
         try {
             Scanner scanner = new Scanner(new File(arquivoEntrada));
 
@@ -22,13 +23,7 @@ public class Main {
                 String[] conexoes = partes[1].split(",");
 
                 // Criar a cidade de origem
-                cidadeOrigem = null;
-                for (Cidade cidade : grafo.getCidades()) {
-                    if (cidade.getNome().equals(nomeCidadeOrigem)) {
-                        cidadeOrigem = cidade;
-                        break;
-                    }
-                }
+                cidadeOrigem = grafo.buscarCidadePorNome(nomeCidadeOrigem);
                 if (cidadeOrigem == null) {
                     cidadeOrigem = new Cidade(nomeCidadeOrigem);
                     grafo.adicionarCidade(cidadeOrigem);
@@ -53,24 +48,15 @@ public class Main {
                         continue; // Pule esta iteração do loop e continue com a próxima conexão
                     }
 
-                    Cidade cidadeDestino = null;
-
-                    for (Cidade cidade : grafo.getCidades()) {
-                        if (cidade.getNome().equals(nomeCidadeDestino)) {
-                            cidadeDestino = cidade;
-                            break;
-                        }
-                    }
-
+                    Cidade cidadeDestino = grafo.buscarCidadePorNome(nomeCidadeDestino);
                     if (cidadeDestino == null) {
                         cidadeDestino = new Cidade(nomeCidadeDestino);
                         grafo.adicionarCidade(cidadeDestino);
                     }
 
-                    Aresta aresta = new Aresta(cidadeOrigem, new Cidade(nomeCidadeDestino), peso);
+                    Aresta aresta = new Aresta(cidadeOrigem, cidadeDestino, peso);
                     grafo.adicionarAresta(aresta);
                 }
-
             }
             scanner.close();
         } catch (FileNotFoundException e) {
@@ -129,43 +115,30 @@ public class Main {
                 case 3:
                     System.out.println("Digite o nome da primeira cidade:");
                     String nomeCidade1 = sc.nextLine();
+                    sc.nextLine();
                     System.out.println("Digite o nome da segunda cidade:");
                     String nomeCidade2 = sc.nextLine();
+                    
 
-                    Cidade cidade1 = null, cidade2 = null;
-                    for (Cidade cidade : grafo.getCidades()) {
-                        if (cidade.getNome().equals(nomeCidade1)) {
-                            cidade1 = cidade;
-                        }
-                        if (cidade.getNome().equals(nomeCidade2)) {
-                            cidade2 = cidade;
-                        }
-                    }
+                    Cidade cidade1 = grafo.buscarCidadePorNome(nomeCidade1);
+                    Cidade cidade2 = grafo.buscarCidadePorNome(nomeCidade2);
 
-                    if (cidade1 == null || cidade2 == null) {
-                        System.out.println("Uma ou ambas as cidades não foram encontradas.");
-                    } else if (grafo.existeEstradaEntreCidades(cidade1, cidade2)) {
-                        System.out.println("Existe uma estrada entre " + nomeCidade1 + " e " + nomeCidade2 + ".");
+                    if (cidade1 != null && cidade2 != null) {
+                        if (grafo.existeEstradaEntreCidades(cidade1, cidade2)) {
+                            System.out.println("Existe uma estrada entre " + nomeCidade1 + " e " + nomeCidade2 + ".");
+                        } else {
+                            System.out.println("Não existe uma estrada entre " + nomeCidade1 + " e " + nomeCidade2 + ".");
+                        }
                     } else {
-                        System.out
-                                .println("Não existe uma estrada entre " + nomeCidade1 + " e " + nomeCidade2 + ".");
+                        System.out.println("Uma ou ambas as cidades não foram encontradas.");
                     }
                     break;
                 case 4:
                     System.out.println("Digite o nome da cidade sede:");
+                    sc.nextLine(); // Limpar o buffer
                     String nomeCidadeSede = sc.nextLine();
-
-                    Cidade cidadeSede = null;
-                    for (Cidade cidade : grafo.getCidades()) {
-                        if (cidade.getNome().equals(nomeCidadeSede)) {
-                            cidadeSede = cidade;
-                            break;
-                        }
-                    }
-
-                    if (cidadeSede == null) {
-                        System.out.println("Cidade sede não encontrada.");
-                    } else {
+                    Cidade cidadeSede = grafo.buscarCidadePorNome(nomeCidadeSede);
+                    if (cidadeSede != null) {
                         List<Cidade> inacessiveis = grafo.cidadesInacessiveis(cidadeSede);
                         if (inacessiveis.isEmpty()) {
                             System.out.println("Todas as cidades são acessíveis a partir da cidade sede.");
@@ -175,6 +148,8 @@ public class Main {
                                 System.out.println(inacessivel.getNome());
                             }
                         }
+                    } else {
+                        System.out.println("Cidade sede não encontrada.");
                     }
                     break;
                 case 5:
@@ -208,6 +183,5 @@ public class Main {
         } while (escolha != 7);
 
         sc.close();
-
     }
 }
