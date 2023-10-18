@@ -89,10 +89,11 @@ public class Main {
         do {
             System.out.println("Escolha uma opção:");
             System.out.println("1 - Verificar existência de estrada entre cidades.");
-            System.out.println("2 - Identificar cidades inacessíveis a partir da cidade sede.");
-            System.out.println("3 - Recomendar visitação a todas as cidades a partir da cidade sede.");
-            System.out.println("4 - Recomendar rota para um passageiro que deseja visitar todas as cidades.");
-            System.out.println("5 - Sair");
+            System.out.println("2 - Identificar cidades diretamente inacessíveis a partir da cidade sede.");
+            System.out.println("3 - Identificar cidades inacessíveis a partir da cidade sede.");
+            System.out.println("4 - Recomendar visitação a todas as cidades a partir da cidade sede.");
+            System.out.println("5 - Recomendar rota para um passageiro que deseja visitar todas as cidades.");
+            System.out.println("6 - Sair");
             System.out.print("Opção: ");
             escolha = sc.nextInt();
 
@@ -124,7 +125,7 @@ public class Main {
                     Cidade cidadeSede = grafo.buscarCidadePorNome(nomeCidadeSede);
 
                     if (cidadeSede != null) {
-                        List<Cidade> inacessiveis = grafo.cidadesInacessiveis(cidadeSede);
+                        List<Cidade> inacessiveis = grafo.cidadesDiretamenteInacessiveis(cidadeSede);
                         System.out
                                 .println("Cidades diretamente inacessíveis a partir de " + cidadeSede.getNome() + ":");
 
@@ -141,6 +142,29 @@ public class Main {
                     break;
 
                 case 3:
+                    sc = new Scanner(System.in);
+                    System.out.println("Digite o nome da cidade sede para encontrar as cidades completamente inacessíveis:");
+                    nomeCidadeSede = sc.nextLine();
+                    cidadeSede = grafo.buscarCidadePorNome(nomeCidadeSede);
+
+                    if (cidadeSede != null) {
+                        List<Cidade> inacessiveis = grafo.cidadesCompletamenteInacessiveis(cidadeSede);
+                        System.out
+                                .println("Cidades completamente inacessíveis a partir de " + cidadeSede.getNome() + ":");
+
+                        if (inacessiveis.isEmpty()) {
+                            System.out.println("Nenhuma cidade completamente inacessível encontrada.");
+                        } else {
+                            for (Cidade inacessivel : inacessiveis) {
+                                System.out.println(inacessivel.getNome());
+                            }
+                        }
+                    } else {
+                        System.out.println("Cidade sede não encontrada.");
+                    }
+                    break;
+
+                case 4:
                     // COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
 
                     sc = new Scanner(System.in);
@@ -154,7 +178,7 @@ public class Main {
                         }
                     }
                     break;
-                case 4:
+                case 5:
                     // COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
 
                     sc = new Scanner(System.in);
@@ -168,13 +192,13 @@ public class Main {
                         }
                     }
                     break;
-                case 5:
+                case 6:
                     System.out.println("Saindo do programa.");
                     break;
                 default:
                     System.out.println("Opção inválida. Digite um número de 1 a 5.");
             }
-        } while (escolha != 5);
+        } while (escolha != 6);
 
         sc.close();
         scanner1.close();

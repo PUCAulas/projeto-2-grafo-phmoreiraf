@@ -49,8 +49,8 @@ public class Grafo {
         return true;
     }
 
-    // requisito (b) BFS
-    public List<Cidade> cidadesInacessiveis(Cidade cidadeSede) {
+    // Listar todas as cidades DIRETAMENTE inacessíveis a partir de uma cidade sede
+    public List<Cidade> cidadesDiretamenteInacessiveis(Cidade cidadeSede) {
         List<Cidade> inacessiveis = new ArrayList<>();
         
         if (cidadeSede == null) {
@@ -71,6 +71,41 @@ public class Grafo {
         
         return inacessiveis;
     }
+
+    // Requisito (b): Listar todas as cidades inacessíveis a partir de uma cidade sede
+    public List<Cidade> cidadesCompletamenteInacessiveis(Cidade cidadeSede) {
+        List<Cidade> inacessiveis = new ArrayList<>();
+        
+        if (cidadeSede == null) {
+            return inacessiveis;
+        }
+        
+        Set<Cidade> acessiveis = new HashSet<>();
+        Queue<Cidade> fila = new LinkedList<>();
+        
+        acessiveis.add(cidadeSede);
+        fila.add(cidadeSede);
+        
+        while (!fila.isEmpty()) {
+            Cidade atual = fila.poll();
+            
+            for (Cidade vizinho : atual.getVizinhos().keySet()) {
+                if (!acessiveis.contains(vizinho)) {
+                    acessiveis.add(vizinho);
+                    fila.add(vizinho);
+                }
+            }
+        }
+        
+        for (Cidade cidade : cidades) {
+            if (!acessiveis.contains(cidade)) {
+                inacessiveis.add(cidade);
+            }
+        }
+        
+        return inacessiveis;
+    }
+
 
     // Requisito (c): Recomendar visitação em todas as cidades e estradas.
     public List<Cidade> recomendarVisitaTodasCidades(Cidade origem) {
