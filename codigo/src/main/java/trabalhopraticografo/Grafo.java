@@ -49,38 +49,26 @@ public class Grafo {
         return true;
     }
 
-    // requisito (b)
+    // requisito (b) BFS
     public List<Cidade> cidadesInacessiveis(Cidade cidadeSede) {
-        if (cidadeSede == null) {
-            return Collections.emptyList(); // Retorna uma lista vazia se a cidade sede for nula.
-        }
-
-        Set<Cidade> visitados = new HashSet<>();
-        Queue<Cidade> fila = new LinkedList<>();
-
-        fila.add(cidadeSede);
-        visitados.add(cidadeSede);
-
-        while (!fila.isEmpty()) {
-            Cidade atual = fila.poll();
-            for (Cidade vizinho : atual.getVizinhos().keySet()) {
-                if (!visitados.contains(vizinho)) {
-                    fila.add(vizinho);
-                    visitados.add(vizinho);
-                }
-            }
-        }
-
         List<Cidade> inacessiveis = new ArrayList<>();
+        
+        if (cidadeSede == null) {
+            return inacessiveis;
+        }
+        
+        Set<Cidade> acessiveis = new HashSet<>();
+        
+        for (Cidade cidade : cidadeSede.getVizinhos().keySet()) {
+            acessiveis.add(cidade);
+        }
+        
         for (Cidade cidade : cidades) {
-            if (!visitados.contains(cidade)) {
+            if (!cidade.equals(cidadeSede) && !acessiveis.contains(cidade)) {
                 inacessiveis.add(cidade);
             }
         }
-
-        // Remova a cidade sede da lista de cidades inacessíveis
-        inacessiveis.remove(cidadeSede);
-
+        
         return inacessiveis;
     }
 
@@ -162,47 +150,10 @@ public class Grafo {
         return false;
     }
 
-    // public List<Cidade> recomendarRotaPassageiro(Cidade cidadeSede) {
-    // if (cidadeSede == null) {
-    // throw new IllegalArgumentException("Cidade sede não pode ser nula.");
-    // }
+    
 
-    // List<Cidade> rotaRecomendada = new ArrayList<>();
-    // Set<Cidade> visitadas = new HashSet<>();
-    // visitadas.add(cidadeSede);
-    // rotaRecomendada.add(cidadeSede);
 
-    // buscarRotaHamiltoniana(cidadeSede, cidadeSede, visitadas, rotaRecomendada);
 
-    // return rotaRecomendada;
-    // }
-
-    // private boolean buscarRotaHamiltoniana(Cidade cidadeAtual, Cidade cidadeSede,
-    // Set<Cidade> visitadas,
-    // List<Cidade> rota) {
-    // if (visitadas.size() == cidades.size()) {
-    // if (cidadeAtual.vizinhos.containsKey(cidadeSede)) {
-    // rota.add(cidadeSede); // Retornar à cidade sede para fechar o ciclo
-    // return true; // Encontrou uma rota Hamiltoniana
-    // } else {
-    // return false;
-    // }
-    // }
-
-    // for (Cidade vizinho : cidadeAtual.vizinhos.keySet()) {
-    // if (!visitadas.contains(vizinho)) {
-    // visitadas.add(vizinho);
-    // rota.add(vizinho);
-    // if (buscarRotaHamiltoniana(vizinho, cidadeSede, visitadas, rota)) {
-    // return true;
-    // }
-    // visitadas.remove(vizinho);
-    // rota.remove(vizinho);
-    // }
-    // }
-
-    // return false;
-    // }
 
     public Cidade buscarCidadePorNome(String nome) {
         if (nome == null) {
@@ -295,57 +246,7 @@ public class Grafo {
 
         return cidadesVisitadas.size() == cidades.size();
     }
-    /*---------------------------------------------------------------------------------------*/
-
-    // CLASSE BFS
-
-    // private Grafo grafo;
-
-    // public BFS(Grafo grafo) {
-    // this.grafo = grafo;
-    // }
-
-    // public List<Cidade> buscaEmLargura(Cidade origemBFS) {
-    // List<Cidade> resultadoBFS = new ArrayList<>();
-    // Queue<Cidade> fila = new LinkedList<>();
-    // Set<Cidade> visitadas = new HashSet<>();
-
-    // fila.offer(origemBFS);
-    // visitadas.add(origemBFS);
-
-    // while (!fila.isEmpty()) {
-    // Cidade atual = fila.poll();
-    // resultadoBFS.add(atual);
-
-    // for (Cidade vizinho : atual.vizinhos.keySet()) {
-    // if (!visitadas.contains(vizinho)) {
-    // fila.offer(vizinho);
-    // visitadas.add(vizinho);
-    // }
-    // }
-    // }
-
-    // return resultadoBFS;
-    // }
-
-    // public List<Cidade> buscaEmProfundidade(Cidade cidadeOrigem) {
-    // List<Cidade> resultadoDFS = new ArrayList<>();
-    // Set<Cidade> visitadas = new HashSet<>();
-    // buscaEmProfundidadeRecursiva(cidadeOrigem, visitadas, resultadoDFS);
-    // return resultadoDFS;
-    // }
-
-    // private void buscaEmProfundidadeRecursiva(Cidade cidade, Set<Cidade>
-    // visitadas, List<Cidade> resultadoDFS) {
-    // visitadas.add(cidade);
-    // resultadoDFS.add(cidade);
-
-    // for (Cidade vizinho : cidade.vizinhos.keySet()) {
-    // if (!visitadas.contains(vizinho)) {
-    // buscaEmProfundidadeRecursiva(vizinho, visitadas, resultadoDFS);
-    // }
-    // }
-    // }
+    
     public List<Cidade> obterTodasAsCidades() {
         List<Cidade> todasAsCidades = new ArrayList<>();
 

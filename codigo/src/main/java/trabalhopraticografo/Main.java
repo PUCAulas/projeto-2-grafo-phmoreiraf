@@ -116,20 +116,21 @@ public class Main {
                         System.out.println("Uma ou ambas as cidades não foram encontradas.");
                     }
                     break;
+
                 case 2:
-                    // CORRIGIR NOS METODOS
                     sc = new Scanner(System.in);
-                    System.out.println("Digite o nome da cidade sede:");
+                    System.out.println("Digite o nome da cidade sede para encontrar as cidades inacessíveis:");
                     String nomeCidadeSede = sc.nextLine();
                     Cidade cidadeSede = grafo.buscarCidadePorNome(nomeCidadeSede);
 
                     if (cidadeSede != null) {
                         List<Cidade> inacessiveis = grafo.cidadesInacessiveis(cidadeSede);
+                        System.out
+                                .println("Cidades diretamente inacessíveis a partir de " + cidadeSede.getNome() + ":");
 
                         if (inacessiveis.isEmpty()) {
-                            System.out.println("Todas as cidades são acessíveis a partir da cidade sede.");
+                            System.out.println("Nenhuma cidade diretamente inacessível encontrada.");
                         } else {
-                            System.out.println("As seguintes cidades são inacessíveis a partir da cidade sede:");
                             for (Cidade inacessivel : inacessiveis) {
                                 System.out.println(inacessivel.getNome());
                             }
@@ -138,6 +139,7 @@ public class Main {
                         System.out.println("Cidade sede não encontrada.");
                     }
                     break;
+
                 case 3:
                     // COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
 
