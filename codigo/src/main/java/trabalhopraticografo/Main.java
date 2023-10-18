@@ -24,7 +24,7 @@ public class Main {
         } else if (numArquivo == 4) {
             arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/hamiltoniano.txt";
         } else {
-            System.out.println("Digite entre os arquivos (1 e 4");
+            System.out.println("Digite entre os arquivos (1 a 4");
         }
         scanner1.close();
 

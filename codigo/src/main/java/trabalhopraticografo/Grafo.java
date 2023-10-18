@@ -48,7 +48,7 @@ public class Grafo {
         return true;
     }
 
-    // Requisito (b): Identificar cidades inacessíveis a partir da cidade sede. BFS
+    //CIDADE INACESSIVEIS
     public List<Cidade> cidadesInacessiveis(Cidade cidadeSede) {
         if (cidadeSede == null) {
             return Collections.emptyList();

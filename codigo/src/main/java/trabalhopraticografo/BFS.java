@@ -9,6 +9,7 @@ public class BFS {
         this.grafo = grafo;
     }
 
+    // Requisito (b): Identificar cidades inacessíveis a partir da cidade sede. BFS
     public List<Cidade> buscaEmLargura(Cidade origemBFS) {
         List<Cidade> resultadoBFS = new ArrayList<>();
         Queue<Cidade> fila = new LinkedList<>();
