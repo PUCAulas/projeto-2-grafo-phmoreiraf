@@ -7,12 +7,33 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
         // Nome do arquivo de entrada
-        String arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/registro.txt";
+        Scanner scanner1 = new Scanner(System.in);
+
+        String arquivoEntrada = "";
+        int numArquivo;
+
+        System.out.print("Selecione o arquivo que deseja usar: (1 - registro.txt, 2 - cidades.txt, 3 - cidades2.txt, 4 - hamiltoniano.txt) ");
+        numArquivo = scanner1.nextInt();
+
+        if (numArquivo == 1) {
+            arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/registro.txt";
+        } else if (numArquivo == 2) {
+            arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/cidades.txt";
+        } else if (numArquivo == 3) {
+            arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/cidades2.txt";
+        } else if (numArquivo == 4) {
+            arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/hamiltoniano.txt";
+        } else {
+            System.out.println("Digite entre os arquivos (1 e 4");
+        }
+        scanner1.close();
+
         Grafo grafo = new Grafo();
         BFS bfs = new BFS(grafo);
         Cidade cidadeOrigem;
-        
+
         try {
+
             Scanner scanner = new Scanner(new File(arquivoEntrada));
 
             // Processar as linhas do arquivo
@@ -118,7 +139,6 @@ public class Main {
                     sc.nextLine();
                     System.out.println("Digite o nome da segunda cidade:");
                     String nomeCidade2 = sc.nextLine();
-                    
 
                     Cidade cidade1 = grafo.buscarCidadePorNome(nomeCidade1);
                     Cidade cidade2 = grafo.buscarCidadePorNome(nomeCidade2);
@@ -127,7 +147,8 @@ public class Main {
                         if (grafo.existeEstradaEntreCidades(cidade1, cidade2)) {
                             System.out.println("Existe uma estrada entre " + nomeCidade1 + " e " + nomeCidade2 + ".");
                         } else {
-                            System.out.println("Não existe uma estrada entre " + nomeCidade1 + " e " + nomeCidade2 + ".");
+                            System.out
+                                    .println("Não existe uma estrada entre " + nomeCidade1 + " e " + nomeCidade2 + ".");
                         }
                     } else {
                         System.out.println("Uma ou ambas as cidades não foram encontradas.");
