@@ -12,7 +12,7 @@ public class Main {
         String arquivoEntrada = "";
         int numArquivo;
 
-        System.out.print("Selecione o arquivo que deseja usar: (1 - registro.txt, 2 - cidades.txt, 3 - cidades2.txt, 4 - hamiltoniano.txt) ");
+        System.out.println("Selecione o arquivo que deseja usar: (1 - registro.txt, 2 - cidades.txt, 3 - cidades2.txt, 4 - hamiltoniano.txt) ");
         numArquivo = scanner1.nextInt();
 
         if (numArquivo == 1) {
@@ -26,7 +26,7 @@ public class Main {
         } else {
             System.out.println("Digite entre os arquivos (1 a 4");
         }
-        scanner1.close();
+        
 
         Grafo grafo = new Grafo();
         BFS bfs = new BFS(grafo);
@@ -204,5 +204,6 @@ public class Main {
         } while (escolha != 7);
 
         sc.close();
+        scanner1.close();
     }
 }
