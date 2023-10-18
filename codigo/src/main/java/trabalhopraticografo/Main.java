@@ -90,7 +90,7 @@ public class Main {
             System.out.println("Escolha uma opção:");
             System.out.println("1 - Verificar existência de estrada entre cidades.");
             System.out.println("2 - Identificar cidades diretamente inacessíveis a partir da cidade sede.");
-            System.out.println("3 - Identificar cidades inacessíveis a partir da cidade sede.");
+            System.out.println("3 - Identificar cidades completamente inacessíveis a partir da cidade sede.");
             System.out.println("4 - Recomendar visitação a todas as cidades a partir da cidade sede.");
             System.out.println("5 - Recomendar rota para um passageiro que deseja visitar todas as cidades.");
             System.out.println("6 - Sair");
