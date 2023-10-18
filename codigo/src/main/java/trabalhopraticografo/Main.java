@@ -103,7 +103,6 @@ public class Main {
                     String nomeCidade1 = sc.nextLine();
                     System.out.println("Digite o nome da segunda cidade:");
                     String nomeCidade2 = sc.nextLine();
-
                     Cidade cidade1 = grafo.buscarCidadePorNome(nomeCidade1);
                     Cidade cidade2 = grafo.buscarCidadePorNome(nomeCidade2);
 
@@ -118,13 +117,15 @@ public class Main {
                     }
                     break;
                 case 2:
-                                //CORRIGIR NOS METODOS
+                    // CORRIGIR NOS METODOS
                     sc = new Scanner(System.in);
                     System.out.println("Digite o nome da cidade sede:");
                     String nomeCidadeSede = sc.nextLine();
                     Cidade cidadeSede = grafo.buscarCidadePorNome(nomeCidadeSede);
-                    if (cidadeSede != null) {   
+
+                    if (cidadeSede != null) {
                         List<Cidade> inacessiveis = grafo.cidadesInacessiveis(cidadeSede);
+
                         if (inacessiveis.isEmpty()) {
                             System.out.println("Todas as cidades são acessíveis a partir da cidade sede.");
                         } else {
@@ -138,7 +139,7 @@ public class Main {
                     }
                     break;
                 case 3:
-                                //COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
+                    // COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
 
                     sc = new Scanner(System.in);
                     List<Cidade> caminhoMinimo = grafo.recomendarVisitaTodasCidades(grafo.getCidades().get(0));
@@ -152,7 +153,7 @@ public class Main {
                     }
                     break;
                 case 4:
-                                //COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
+                    // COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
 
                     sc = new Scanner(System.in);
                     List<Cidade> cicloHamiltoniano = grafo.cicloHamiltoniano();

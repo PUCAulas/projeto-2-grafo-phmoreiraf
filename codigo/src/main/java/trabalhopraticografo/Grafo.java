@@ -49,24 +49,24 @@ public class Grafo {
         return true;
     }
 
-    // Requisito (b): Identificar cidades inacessíveis a partir da cidade sede. BFS
+    // requisito (b)
     public List<Cidade> cidadesInacessiveis(Cidade cidadeSede) {
         if (cidadeSede == null) {
-            return Collections.emptyList();
+            return Collections.emptyList(); // Retorna uma lista vazia se a cidade sede for nula.
         }
 
         Set<Cidade> visitados = new HashSet<>();
         Queue<Cidade> fila = new LinkedList<>();
 
         fila.add(cidadeSede);
+        visitados.add(cidadeSede);
 
         while (!fila.isEmpty()) {
             Cidade atual = fila.poll();
-            visitados.add(atual);
-
             for (Cidade vizinho : atual.getVizinhos().keySet()) {
                 if (!visitados.contains(vizinho)) {
                     fila.add(vizinho);
+                    visitados.add(vizinho);
                 }
             }
         }
@@ -77,6 +77,9 @@ public class Grafo {
                 inacessiveis.add(cidade);
             }
         }
+
+        // Remova a cidade sede da lista de cidades inacessíveis
+        inacessiveis.remove(cidadeSede);
 
         return inacessiveis;
     }
@@ -343,5 +346,13 @@ public class Grafo {
     // }
     // }
     // }
+    public List<Cidade> obterTodasAsCidades() {
+        List<Cidade> todasAsCidades = new ArrayList<>();
 
+        for (Cidade cidade : cidades) {
+            todasAsCidades.add(cidade);
+        }
+
+        return todasAsCidades;
+    }
 }

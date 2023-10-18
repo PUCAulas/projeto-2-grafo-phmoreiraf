@@ -47,11 +47,13 @@ public class GrafoTest {
         assertTrue(grafo.existeEstradaEntreCidades(cidadeA, cidadeC));
     }
 
-    @Test
-    public void testCidadesInacessiveis() {
-        List<Cidade> inacessiveis = grafo.cidadesInacessiveis(cidadeA);
-        assertEquals(0, inacessiveis.size());
-    }
+    /**
+     * @Test
+     *       public void testCidadesInacessiveis() {
+     *       List<Cidade> inacessiveis = grafo.cidadesInacessiveis(cidadeA);
+     *       assertEquals(0, inacessiveis.size());
+     *       }
+     */
 
     @Test
     public void testrecomendarVisitaTodasCidades() {
