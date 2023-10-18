@@ -12,7 +12,8 @@ public class Main {
         String arquivoEntrada = "";
         int numArquivo;
 
-        System.out.println("Selecione o arquivo que deseja usar: (1 - registro.txt, 2 - cidades.txt, 3 - cidades2.txt, 4 - hamiltoniano.txt) ");
+        System.out.println(
+                "Selecione o arquivo que deseja usar: (1 - registro.txt, 2 - cidades.txt, 3 - cidades2.txt, 4 - hamiltoniano.txt) ");
         numArquivo = scanner1.nextInt();
 
         if (numArquivo == 1) {
@@ -26,10 +27,8 @@ public class Main {
         } else {
             System.out.println("Digite entre os arquivos (1 a 4");
         }
-        
 
         Grafo grafo = new Grafo();
-        BFS bfs = new BFS(grafo);
         Cidade cidadeOrigem;
 
         try {
@@ -99,9 +98,9 @@ public class Main {
 
             switch (escolha) {
                 case 1:
+                    sc = new Scanner(System.in);
                     System.out.println("Digite o nome da primeira cidade:");
                     String nomeCidade1 = sc.nextLine();
-                    sc.nextLine();
                     System.out.println("Digite o nome da segunda cidade:");
                     String nomeCidade2 = sc.nextLine();
 
@@ -110,21 +109,21 @@ public class Main {
 
                     if (cidade1 != null && cidade2 != null) {
                         if (grafo.existeEstradaEntreCidades(cidade1, cidade2)) {
-                            System.out.println("Existe uma estrada entre " + nomeCidade1 + " e " + nomeCidade2 + ".");
+                            System.out.println("Existe uma estrada entre " + cidade1 + " e " + cidade2 + ".");
                         } else {
-                            System.out
-                                    .println("Não existe uma estrada entre " + nomeCidade1 + " e " + nomeCidade2 + ".");
+                            System.out.println("Não existe uma estrada entre " + cidade1 + " e " + cidade2 + ".");
                         }
                     } else {
                         System.out.println("Uma ou ambas as cidades não foram encontradas.");
                     }
                     break;
                 case 2:
+                                //CORRIGIR NOS METODOS
+                    sc = new Scanner(System.in);
                     System.out.println("Digite o nome da cidade sede:");
-                    sc.nextLine(); // Limpar o buffer
                     String nomeCidadeSede = sc.nextLine();
                     Cidade cidadeSede = grafo.buscarCidadePorNome(nomeCidadeSede);
-                    if (cidadeSede != null) {
+                    if (cidadeSede != null) {   
                         List<Cidade> inacessiveis = grafo.cidadesInacessiveis(cidadeSede);
                         if (inacessiveis.isEmpty()) {
                             System.out.println("Todas as cidades são acessíveis a partir da cidade sede.");
@@ -139,6 +138,9 @@ public class Main {
                     }
                     break;
                 case 3:
+                                //COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
+
+                    sc = new Scanner(System.in);
                     List<Cidade> caminhoMinimo = grafo.recomendarVisitaTodasCidades(grafo.getCidades().get(0));
                     if (caminhoMinimo == null) {
                         System.out.println("Não foi possível encontrar um caminho que visite todas as cidades.");
@@ -150,6 +152,9 @@ public class Main {
                     }
                     break;
                 case 4:
+                                //COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
+
+                    sc = new Scanner(System.in);
                     List<Cidade> cicloHamiltoniano = grafo.cicloHamiltoniano();
                     if (cicloHamiltoniano == null) {
                         System.out.println("Não foi possível encontrar um ciclo hamiltoniano.");
