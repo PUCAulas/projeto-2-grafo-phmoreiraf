@@ -89,51 +89,16 @@ public class Main {
         int escolha;
         do {
             System.out.println("Escolha uma opção:");
-            System.out.println("1 - Busca em largura.");
-            System.out.println("2 - Busca em profundidade.");
-            System.out.println("3 - Verificar existência de estrada entre cidades.");
-            System.out.println("4 - Identificar cidades inacessíveis a partir da cidade sede.");
-            System.out.println("5 - Recomendar visitação a todas as cidades a partir da cidade sede.");
-            System.out.println("6 - Recomendar rota para um passageiro que deseja visitar todas as cidades.");
-            System.out.println("7 - Sair");
+            System.out.println("1 - Verificar existência de estrada entre cidades.");
+            System.out.println("2 - Identificar cidades inacessíveis a partir da cidade sede.");
+            System.out.println("3 - Recomendar visitação a todas as cidades a partir da cidade sede.");
+            System.out.println("4 - Recomendar rota para um passageiro que deseja visitar todas as cidades.");
+            System.out.println("5 - Sair");
             System.out.print("Opção: ");
             escolha = sc.nextInt();
 
             switch (escolha) {
                 case 1:
-                    System.out.print("Digite o nome da cidade de origem para a busca em largura: ");
-                    sc.nextLine(); // Limpar o buffer
-                    String nomeCidadeOrigem = sc.nextLine();
-                    cidadeOrigem = grafo.buscarCidadePorNome(nomeCidadeOrigem);
-                    if (cidadeOrigem != null) {
-                        List<Cidade> resultadoBFS = bfs.buscaEmLargura(cidadeOrigem);
-                        System.out.println(
-                                "Resultado da busca em largura a partir de " + cidadeOrigem.getNome() + ":");
-                        for (Cidade cidade : resultadoBFS) {
-                            System.out.println("- " + cidade.getNome());
-                        }
-                    } else {
-                        System.out.println("Cidade de origem não encontrada.");
-                    }
-                    break;
-                case 2:
-                    System.out.print("Digite o nome da cidade de origem para a busca em profundidade: ");
-                    sc.nextLine(); // Limpar o buffer
-                    String nomeCidadeOrigemP = sc.nextLine();
-                    Cidade cidadeOrigemP = grafo.buscarCidadePorNome(nomeCidadeOrigemP);
-
-                    if (cidadeOrigemP != null) {
-                        List<Cidade> resultadoDFS = bfs.buscaEmProfundidade(cidadeOrigemP);
-                        System.out.println(
-                                "Resultado da busca em profundidade a partir de " + cidadeOrigemP.getNome() + ":");
-                        for (Cidade cidade : resultadoDFS) {
-                            System.out.println("- " + cidade.getNome());
-                        }
-                    } else {
-                        System.out.println("Cidade de origem não encontrada.");
-                    }
-                    break;
-                case 3:
                     System.out.println("Digite o nome da primeira cidade:");
                     String nomeCidade1 = sc.nextLine();
                     sc.nextLine();
@@ -154,7 +119,7 @@ public class Main {
                         System.out.println("Uma ou ambas as cidades não foram encontradas.");
                     }
                     break;
-                case 4:
+                case 2:
                     System.out.println("Digite o nome da cidade sede:");
                     sc.nextLine(); // Limpar o buffer
                     String nomeCidadeSede = sc.nextLine();
@@ -173,7 +138,7 @@ public class Main {
                         System.out.println("Cidade sede não encontrada.");
                     }
                     break;
-                case 5:
+                case 3:
                     List<Cidade> caminhoMinimo = grafo.recomendarVisitaTodasCidades(grafo.getCidades().get(0));
                     if (caminhoMinimo == null) {
                         System.out.println("Não foi possível encontrar um caminho que visite todas as cidades.");
@@ -184,7 +149,7 @@ public class Main {
                         }
                     }
                     break;
-                case 6:
+                case 4:
                     List<Cidade> cicloHamiltoniano = grafo.cicloHamiltoniano();
                     if (cicloHamiltoniano == null) {
                         System.out.println("Não foi possível encontrar um ciclo hamiltoniano.");
@@ -195,13 +160,13 @@ public class Main {
                         }
                     }
                     break;
-                case 7:
+                case 5:
                     System.out.println("Saindo do programa.");
                     break;
                 default:
                     System.out.println("Opção inválida. Digite um número de 1 a 5.");
             }
-        } while (escolha != 7);
+        } while (escolha != 5);
 
         sc.close();
         scanner1.close();
