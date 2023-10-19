@@ -169,6 +169,7 @@ public class Main {
 
                 case 4:
                     // CORRIGIR CASO ESTEJA ERRADO TANTO NO MAIN QUANTO NO METODO
+                    
                     sc = new Scanner(System.in);
                     // Perguntar ao usuário de qual cidade eles gostariam de começar a visitação
                     System.out.println("De qual cidade você gostaria de começar a visitação?");
