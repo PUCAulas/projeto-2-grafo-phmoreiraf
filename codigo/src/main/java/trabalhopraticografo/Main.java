@@ -187,58 +187,44 @@ public class Main {
                     break;
                 case 5:
                     // COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
-
                     sc = new Scanner(System.in);
                     // Perguntar ao usuário de qual cidade eles gostariam de começar a visitação
                     System.out.println("De qual cidade você gostaria de começar a visitação?");
-
                     nomeCidadeInicial = sc.nextLine();
-
                     cidadeSede = grafo.buscarCidadePorNome(nomeCidadeInicial);
-
                     if (cidadeSede != null) {
+                        // Visitar todas as cidades a partir da cidade escolhida pelo usuário
+                        // Obter a rota recomendada
+                        List<Aresta> rota = grafo.rotaHamiltoniana(nomeCidadeInicial);
 
-                        List<Cidade> rota = grafo.encontrarCicloHamiltoniano(cidadeSede);
-
-                        if (rota != null) {
-
-                            String soma = "";
-
-                            int distanciaTotal = 0;
-
-                            for (int i = 0; i < rota.size(); i++) {
-
-                                Cidade origem = rota.get(i);
-
-                                Cidade destino = rota.get((i + 1) % rota.size()); // Para retornar à cidade sede
-
-                                int distancia = origem.getVizinhos().get(destino);
-
-                                System.out.println(
-                                        origem.getNome() + " -> " + destino.getNome() + " (" + distancia + " KM)");
-
-                                if (!soma.isEmpty()) {
-
-                                    soma += " + ";
-
-                                }
-
-                                soma += distancia;
-
-                                distanciaTotal += distancia;
-
-                            }
-
-                            System.out.print("Soma das distâncias: " + soma + " = " + distanciaTotal + " KM\n");
-                            System.out.println("Distância total: " + distanciaTotal + " KM");
-                        } else {
+                        // Imprimir a rota e calcular a distância total
+                        String soma = "";
+                        int distanciaTotal = 0;
+                        for (Aresta aresta : rota) {
                             System.out.println(
-                                    "Não foi possível encontrar um ciclo Hamiltoniano a partir da cidade sede.");
+                                    aresta.getOrigem() + " -> " + aresta.getDestino() + " (" + aresta.getPeso() + ")");
+                            // System.out.println("Soma das distancias: " + aresta.getPeso() + ": ");
                         }
+
+                        System.out.print("Soma das distancias: ");
+
+                        for (Aresta aresta : rota) {
+
+                            if (!soma.isEmpty()) {
+                                soma += " + ";
+                            }
+                            soma += aresta.getPeso();
+                            distanciaTotal += aresta.getPeso();
+                        }
+
+                        // soma += " = " + distanciaTotal;
+
+                        System.out.println(soma);
+
+                        System.out.println("Distância total: " + distanciaTotal + " KM");
                     } else {
                         System.out.println("Cidade não encontrada!");
                     }
-
                     break;
 
                 case 6:

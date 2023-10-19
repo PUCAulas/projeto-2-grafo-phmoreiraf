@@ -134,53 +134,41 @@ public class Grafo {
     // Requisito (d): Recomendar uma rota para um passageiro que deseja visitar
     // todas as cidades.
 
-    public List<Cidade> encontrarCicloHamiltoniano(Cidade cidadeSede) {
-        if (cidadeSede == null) {
-            throw new IllegalArgumentException("Cidade sede não pode ser nula.");
-        }
-    
+    public List<Aresta> rotaHamiltoniana(String nomeCidadeInicial) {
+        List<Aresta> rota = new ArrayList<>();
         Set<Cidade> visitadas = new HashSet<>();
-        List<Cidade> rota = new ArrayList<>();
-        rota.add(cidadeSede);
-        visitadas.add(cidadeSede);
-    
-        while (visitadas.size() < cidades.size()) {
-            Cidade cidadeAtual = rota.get(rota.size() - 1);
-            Cidade cidadeMaisProxima = encontrarCidadeMaisProxima(cidadeAtual, visitadas);
-            
-            if (cidadeMaisProxima == null) {
-                // Não foi possível encontrar uma cidade mais próxima não visitada.
-                // Nesse ponto, você pode retornar nulo ou tratar de outra forma, dependendo das necessidades do seu sistema.
-                return null;
+        Cidade atual = null;
+
+        // Procurar a cidade inicial na lista de cidades
+        for (Cidade cidade : getCidades()) {
+            if (cidade.getNome().equals(nomeCidadeInicial)) {
+                atual = cidade;
+                break;
             }
-    
-            rota.add(cidadeMaisProxima);
-            visitadas.add(cidadeMaisProxima);
         }
-    
-        // Adicione a cidade sede para completar o ciclo.
-        rota.add(cidadeSede);
-    
-        return rota;
-    }
-    
-    private Cidade encontrarCidadeMaisProxima(Cidade origem, Set<Cidade> visitadas) {
-        Cidade cidadeMaisProxima = null;
-        int distanciaMinima = Integer.MAX_VALUE;
-    
-        for (Cidade cidade : cidades) {
-            if (!visitadas.contains(cidade) && !cidade.equals(origem)) {
-                int distancia = origem.getVizinhos().getOrDefault(cidade, Integer.MAX_VALUE);
-                if (distancia < distanciaMinima) {
-                    distanciaMinima = distancia;
-                    cidadeMaisProxima = cidade;
+
+        while (atual != null) {
+            visitadas.add(atual);
+
+            Cidade proxima = null;
+            int menorDistancia = Integer.MAX_VALUE;
+
+            for (Map.Entry<Cidade, Integer> entry : atual.getVizinhos().entrySet()) {
+                if (!visitadas.contains(entry.getKey()) && entry.getValue() < menorDistancia) {
+                    proxima = entry.getKey();
+                    menorDistancia = entry.getValue();
                 }
             }
+
+            if (proxima != null) {
+                rota.add(new Aresta(atual, proxima, menorDistancia));
+            }
+
+            atual = proxima;
         }
-    
-        return cidadeMaisProxima;
+
+        return rota;
     }
-    
 
     public Cidade buscarCidadePorNome(String nome) {
         if (nome == null) {
