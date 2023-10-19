@@ -13,7 +13,8 @@ public class Main {
         int numArquivo;
         String nomeCidadeInicial;
 
-        System.out.println("Selecione o arquivo que deseja usar: (1 - registro.txt, 2 - cidades.txt, 3 - cidades2.txt, 4 - hamiltoniano.txt) ");
+        System.out.println(
+                "Selecione o arquivo que deseja usar: (1 - registro.txt, 2 - cidades.txt, 3 - cidades2.txt, 4 - hamiltoniano.txt) ");
         numArquivo = scanner1.nextInt();
 
         if (numArquivo == 1) {
@@ -172,8 +173,16 @@ public class Main {
                     // Perguntar ao usuário de qual cidade eles gostariam de começar a visitação
                     System.out.println("De qual cidade você gostaria de começar a visitação?");
                     nomeCidadeInicial = sc.nextLine();
-                    // Visitar todas as cidades a partir da cidade escolhida pelo usuário
-                    grafo.visitarTodas(nomeCidadeInicial);
+
+                    cidadeSede = grafo.buscarCidadePorNome(nomeCidadeInicial);
+
+                    if (cidadeSede != null) {
+                        // Visitar todas as cidades a partir da cidade escolhida pelo usuário
+                        grafo.visitarTodas(nomeCidadeInicial);
+                    } else {
+                        System.out.println("Cidade não encontrada!");
+                    }
+
                     break;
                 case 5:
                     // COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
@@ -183,17 +192,27 @@ public class Main {
                     System.out.println("De qual cidade você gostaria de começar a visitação?");
                     nomeCidadeInicial = sc.nextLine();
 
-                    // Obter a rota recomendada
-                    List<Aresta> rota = grafo.rotaHamiltoniana(nomeCidadeInicial);
+                    cidadeSede = grafo.buscarCidadePorNome(nomeCidadeInicial);
 
-                    // Imprimir a rota e calcular a distância total
-                    int distanciaTotal = 0;
-                    for (Aresta aresta : rota) {
-                        System.out.println(aresta.getOrigem() + " -> " + aresta.getDestino() + " (" + aresta.getPeso() + ")");
-                        distanciaTotal += aresta.getPeso();
+                    if (cidadeSede != null) {
+                        // Visitar todas as cidades a partir da cidade escolhida pelo usuário
+
+                        // Obter a rota recomendada
+                        List<Aresta> rota = grafo.rotaHamiltoniana(nomeCidadeInicial);
+
+                        // Imprimir a rota e calcular a distância total
+                        int distanciaTotal = 0;
+                        for (Aresta aresta : rota) {
+                            System.out.println(
+                                    aresta.getOrigem() + " -> " + aresta.getDestino() + " (" + aresta.getPeso() + ")");
+                            distanciaTotal += aresta.getPeso();
+                        }
+
+                        System.out.println("Distância total: " + distanciaTotal + " KM");
+                    } else {
+                        System.out.println("Cidade não encontrada!");
                     }
 
-                    System.out.println("Distância total: " + distanciaTotal + " KM");
                     break;
                 case 6:
                     System.out.println("Saindo do programa.");
