@@ -130,10 +130,6 @@ public class GrafoTest {
         List<Aresta> rota = grafo.rotaHamiltoniana("Cidade A");
 
         assertEquals(0, rota.size());
-        // assertEquals(cidadeA, rota.get(0).getOrigem());
-        // assertEquals(cidadeB, rota.get(0).getDestino());
-        // assertEquals(cidadeB, rota.get(1).getOrigem());
-        // assertEquals(cidadeC, rota.get(1).getDestino());
     }
 }
 
