@@ -138,7 +138,7 @@ public class Main {
                             }
                         }
                     } else {
-                        System.out.println("Cidade sede não encontrada.");
+                        System.out.println("Cidade sede não encontrada!");
                     }
                     break;
 
@@ -163,7 +163,7 @@ public class Main {
                             }
                         }
                     } else {
-                        System.out.println("Cidade sede não encontrada.");
+                        System.out.println("Cidade sede não encontrada!");
                     }
                     break;
 
