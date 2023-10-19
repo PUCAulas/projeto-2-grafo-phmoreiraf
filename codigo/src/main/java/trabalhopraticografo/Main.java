@@ -11,9 +11,9 @@ public class Main {
 
         String arquivoEntrada = "";
         int numArquivo;
+        String nomeCidadeInicial;
 
-        System.out.println(
-                "Selecione o arquivo que deseja usar: (1 - registro.txt, 2 - cidades.txt, 3 - cidades2.txt, 4 - hamiltoniano.txt) ");
+        System.out.println("Selecione o arquivo que deseja usar: (1 - registro.txt, 2 - cidades.txt, 3 - cidades2.txt, 4 - hamiltoniano.txt) ");
         numArquivo = scanner1.nextInt();
 
         if (numArquivo == 1) {
@@ -143,14 +143,16 @@ public class Main {
 
                 case 3:
                     sc = new Scanner(System.in);
-                    System.out.println("Digite o nome da cidade sede para encontrar as cidades completamente inacessíveis:");
+                    System.out.println(
+                            "Digite o nome da cidade sede para encontrar as cidades completamente inacessíveis:");
                     nomeCidadeSede = sc.nextLine();
                     cidadeSede = grafo.buscarCidadePorNome(nomeCidadeSede);
 
                     if (cidadeSede != null) {
                         List<Cidade> inacessiveis = grafo.cidadesCompletamenteInacessiveis(cidadeSede);
                         System.out
-                                .println("Cidades completamente inacessíveis a partir de " + cidadeSede.getNome() + ":");
+                                .println(
+                                        "Cidades completamente inacessíveis a partir de " + cidadeSede.getNome() + ":");
 
                         if (inacessiveis.isEmpty()) {
                             System.out.println("Nenhuma cidade completamente inacessível encontrada.");
@@ -165,32 +167,33 @@ public class Main {
                     break;
 
                 case 4:
-                    // COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
-
+                    // CORRIGIR CASO ESTEJA ERRADO TANTO NO MAIN QUANTO NO METODO
                     sc = new Scanner(System.in);
-                    List<Cidade> caminhoMinimo = grafo.recomendarVisitaTodasCidades(grafo.getCidades().get(0));
-                    if (caminhoMinimo == null) {
-                        System.out.println("Não foi possível encontrar um caminho que visite todas as cidades.");
-                    } else {
-                        System.out.println("Recomendação de visitação em todas as cidades e estradas:");
-                        for (Cidade cidade : caminhoMinimo) {
-                            System.out.println(cidade.getNome());
-                        }
-                    }
+                    // Perguntar ao usuário de qual cidade eles gostariam de começar a visitação
+                    System.out.println("De qual cidade você gostaria de começar a visitação?");
+                    nomeCidadeInicial = sc.nextLine();
+                    // Visitar todas as cidades a partir da cidade escolhida pelo usuário
+                    grafo.visitarTodas(nomeCidadeInicial);
                     break;
                 case 5:
                     // COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
 
                     sc = new Scanner(System.in);
-                    List<Cidade> cicloHamiltoniano = grafo.cicloHamiltoniano();
-                    if (cicloHamiltoniano == null) {
-                        System.out.println("Não foi possível encontrar um ciclo hamiltoniano.");
-                    } else {
-                        System.out.println("Recomendação de rota para visitar todas as cidades:");
-                        for (Cidade cidade : cicloHamiltoniano) {
-                            System.out.println(cidade.getNome());
-                        }
+                    // Perguntar ao usuário de qual cidade eles gostariam de começar a visitação
+                    System.out.println("De qual cidade você gostaria de começar a visitação?");
+                    nomeCidadeInicial = sc.nextLine();
+
+                    // Obter a rota recomendada
+                    List<Aresta> rota = grafo.rotaHamiltoniana(nomeCidadeInicial);
+
+                    // Imprimir a rota e calcular a distância total
+                    int distanciaTotal = 0;
+                    for (Aresta aresta : rota) {
+                        System.out.println(aresta.getOrigem() + " -> " + aresta.getDestino() + " (" + aresta.getPeso() + ")");
+                        distanciaTotal += aresta.getPeso();
                     }
+
+                    System.out.println("Distância total: " + distanciaTotal);
                     break;
                 case 6:
                     System.out.println("Saindo do programa.");

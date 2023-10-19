@@ -52,43 +52,44 @@ public class Grafo {
     // Listar todas as cidades DIRETAMENTE inacessíveis a partir de uma cidade sede
     public List<Cidade> cidadesDiretamenteInacessiveis(Cidade cidadeSede) {
         List<Cidade> inacessiveis = new ArrayList<>();
-        
+
         if (cidadeSede == null) {
             return inacessiveis;
         }
-        
+
         Set<Cidade> acessiveis = new HashSet<>();
-        
+
         for (Cidade cidade : cidadeSede.getVizinhos().keySet()) {
             acessiveis.add(cidade);
         }
-        
+
         for (Cidade cidade : cidades) {
             if (!cidade.equals(cidadeSede) && !acessiveis.contains(cidade)) {
                 inacessiveis.add(cidade);
             }
         }
-        
+
         return inacessiveis;
     }
 
-    // Requisito (b): Listar todas as cidades inacessíveis a partir de uma cidade sede
+    // Requisito (b): Listar todas as cidades inacessíveis a partir de uma cidade
+    // sede
     public List<Cidade> cidadesCompletamenteInacessiveis(Cidade cidadeSede) {
         List<Cidade> inacessiveis = new ArrayList<>();
-        
+
         if (cidadeSede == null) {
             return inacessiveis;
         }
-        
+
         Set<Cidade> acessiveis = new HashSet<>();
         Queue<Cidade> fila = new LinkedList<>();
-        
+
         acessiveis.add(cidadeSede);
         fila.add(cidadeSede);
-        
+
         while (!fila.isEmpty()) {
             Cidade atual = fila.poll();
-            
+
             for (Cidade vizinho : atual.getVizinhos().keySet()) {
                 if (!acessiveis.contains(vizinho)) {
                     acessiveis.add(vizinho);
@@ -96,18 +97,33 @@ public class Grafo {
                 }
             }
         }
-        
+
         for (Cidade cidade : cidades) {
             if (!acessiveis.contains(cidade)) {
                 inacessiveis.add(cidade);
             }
         }
-        
+
         return inacessiveis;
     }
 
-
     // Requisito (c): Recomendar visitação em todas as cidades e estradas.
+
+    public void visitarTodas(String nomeCidadeInicial) {
+        Cidade cidadeInicial = null;
+        for (Cidade cidade : cidades) {
+            if (cidade.getNome().equals(nomeCidadeInicial)) {
+                cidadeInicial = cidade;
+                break;
+            }
+        }
+        if (cidadeInicial != null) {
+            cidadeInicial.visitarTodas(new HashSet<>());
+        } else {
+            System.out.println("Cidade não encontrada: " + nomeCidadeInicial);
+        }
+    }
+
     public List<Cidade> recomendarVisitaTodasCidades(Cidade origem) {
         if (origem == null || !cidades.contains(origem)) {
             return Collections.emptyList();
@@ -151,6 +167,42 @@ public class Grafo {
     // Requisito (d): Recomendar uma rota para um passageiro que deseja visitar
     // todas as cidades.
 
+    public List<Aresta> rotaHamiltoniana(String nomeCidadeInicial) {
+        List<Aresta> rota = new ArrayList<>();
+        Set<Cidade> visitadas = new HashSet<>();
+        Cidade atual = null;
+
+        // Procurar a cidade inicial na lista de cidades
+        for (Cidade cidade : getCidades()) {
+            if (cidade.getNome().equals(nomeCidadeInicial)) {
+                atual = cidade;
+                break;
+            }
+        }
+
+        while (atual != null) {
+            visitadas.add(atual);
+
+            Cidade proxima = null;
+            int menorDistancia = Integer.MAX_VALUE;
+
+            for (Map.Entry<Cidade, Integer> entry : atual.getVizinhos().entrySet()) {
+                if (!visitadas.contains(entry.getKey()) && entry.getValue() < menorDistancia) {
+                    proxima = entry.getKey();
+                    menorDistancia = entry.getValue();
+                }
+            }
+
+            if (proxima != null) {
+                rota.add(new Aresta(atual, proxima, menorDistancia));
+            }
+
+            atual = proxima;
+        }
+
+        return rota;
+    }
+
     public List<Cidade> cicloHamiltoniano() {
         List<Cidade> solucao = new ArrayList<>();
 
@@ -184,11 +236,6 @@ public class Grafo {
 
         return false;
     }
-
-    
-
-
-
 
     public Cidade buscarCidadePorNome(String nome) {
         if (nome == null) {
@@ -281,7 +328,7 @@ public class Grafo {
 
         return cidadesVisitadas.size() == cidades.size();
     }
-    
+
     public List<Cidade> obterTodasAsCidades() {
         List<Cidade> todasAsCidades = new ArrayList<>();
 

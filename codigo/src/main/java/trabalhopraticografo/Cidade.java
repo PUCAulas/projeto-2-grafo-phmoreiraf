@@ -43,4 +43,16 @@ public class Cidade {
     public String toString() {
         return nome;
     }
+
+    //Requisito c
+    
+    public void visitarTodas(HashSet<Cidade> visitadas) {
+        visitadas.add(this);
+        System.out.println("Visitando: " + this.getNome());
+        for (Cidade vizinho : this.getVizinhos().keySet()) {
+            if (!visitadas.contains(vizinho)) {
+                vizinho.visitarTodas(visitadas);
+            }
+        }
+    }
 }
