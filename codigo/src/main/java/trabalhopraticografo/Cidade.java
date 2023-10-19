@@ -44,8 +44,8 @@ public class Cidade {
         return nome;
     }
 
-    //Requisito c
-    
+    // Requisito c
+
     public void visitarTodas(HashSet<Cidade> visitadas) {
         if (visitadas == null) {
             throw new IllegalArgumentException("O conjunto de cidades visitadas não pode ser nulo");

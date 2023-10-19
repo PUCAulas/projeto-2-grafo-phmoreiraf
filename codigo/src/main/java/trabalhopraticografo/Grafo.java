@@ -79,7 +79,6 @@ public class Grafo {
         return inacessiveis;
     }
 
-
     // Requisito (b): Listar todas as cidades inacessíveis a partir de uma cidade
     // sede
     public List<Cidade> cidadesCompletamenteInacessiveis(Cidade cidadeSede) {
@@ -132,119 +131,56 @@ public class Grafo {
         }
     }
 
-    // public List<Cidade> recomendarVisitaTodasCidades(Cidade origem) {
-    // if (origem == null || !cidades.contains(origem)) {
-    // return Collections.emptyList();
-    // }
-
-    // Map<Cidade, Integer> distancias = new HashMap<>();
-    // Map<Cidade, Cidade> anteriores = new HashMap<>();
-    // PriorityQueue<Cidade> fila = new
-    // PriorityQueue<>(Comparator.comparingInt(distancias::get));
-
-    // for (Cidade cidade : cidades) {
-    // if (cidade == origem) {
-    // distancias.put(cidade, 0);
-    // } else {
-    // distancias.put(cidade, Integer.MAX_VALUE);
-    // }
-    // fila.add(cidade);
-    // }
-
-    // while (!fila.isEmpty()) {
-    // Cidade atual = fila.poll();
-
-    // for (Map.Entry<Cidade, Integer> vizinho : atual.getVizinhos().entrySet()) {
-    // int distanciaAlternativa = distancias.get(atual) + vizinho.getValue();
-    // if (distanciaAlternativa < distancias.get(vizinho.getKey())) {
-    // fila.remove(vizinho.getKey());
-    // distancias.put(vizinho.getKey(), distanciaAlternativa);
-    // anteriores.put(vizinho.getKey(), atual);
-    // fila.add(vizinho.getKey());
-    // }
-    // }
-    // }
-
-    // List<Cidade> caminho = new ArrayList<>();
-    // for (Cidade cidade : anteriores.keySet()) {
-    // caminho.add(cidade);
-    // }
-
-    // return caminho;
-    // }
-
     // Requisito (d): Recomendar uma rota para um passageiro que deseja visitar
     // todas as cidades.
 
-    public List<Aresta> rotaHamiltoniana(String nomeCidadeInicial) {
-        List<Aresta> rota = new ArrayList<>();
+    public List<Cidade> encontrarCicloHamiltoniano(Cidade cidadeSede) {
+        if (cidadeSede == null) {
+            throw new IllegalArgumentException("Cidade sede não pode ser nula.");
+        }
+    
         Set<Cidade> visitadas = new HashSet<>();
-        Cidade atual = null;
-
-        // Procurar a cidade inicial na lista de cidades
-        for (Cidade cidade : getCidades()) {
-            if (cidade.getNome().equals(nomeCidadeInicial)) {
-                atual = cidade;
-                break;
+        List<Cidade> rota = new ArrayList<>();
+        rota.add(cidadeSede);
+        visitadas.add(cidadeSede);
+    
+        while (visitadas.size() < cidades.size()) {
+            Cidade cidadeAtual = rota.get(rota.size() - 1);
+            Cidade cidadeMaisProxima = encontrarCidadeMaisProxima(cidadeAtual, visitadas);
+            
+            if (cidadeMaisProxima == null) {
+                // Não foi possível encontrar uma cidade mais próxima não visitada.
+                // Nesse ponto, você pode retornar nulo ou tratar de outra forma, dependendo das necessidades do seu sistema.
+                return null;
             }
+    
+            rota.add(cidadeMaisProxima);
+            visitadas.add(cidadeMaisProxima);
         }
-
-        while (atual != null) {
-            visitadas.add(atual);
-
-            Cidade proxima = null;
-            int menorDistancia = Integer.MAX_VALUE;
-
-            for (Map.Entry<Cidade, Integer> entry : atual.getVizinhos().entrySet()) {
-                if (!visitadas.contains(entry.getKey()) && entry.getValue() < menorDistancia) {
-                    proxima = entry.getKey();
-                    menorDistancia = entry.getValue();
-                }
-            }
-
-            if (proxima != null) {
-                rota.add(new Aresta(atual, proxima, menorDistancia));
-            }
-
-            atual = proxima;
-        }
-
+    
+        // Adicione a cidade sede para completar o ciclo.
+        rota.add(cidadeSede);
+    
         return rota;
     }
-
-    // public List<Cidade> cicloHamiltoniano() {
-    // List<Cidade> solucao = new ArrayList<>();
-
-    // if (cidades.size() > 0) {
-    // solucao.add(cidades.get(0));
-
-    // if (cicloHamiltoniano(solucao, cidades.get(0))) {
-    // return solucao;
-    // }
-    // }
-
-    // return null;
-    // }
-
-    // private boolean cicloHamiltoniano(List<Cidade> solucao, Cidade cidadeAtual) {
-    // if (solucao.size() == cidades.size()) {
-    // return cidadeAtual.getVizinhos().containsKey(solucao.get(0));
-    // }
-
-    // for (Cidade vizinho : cidadeAtual.getVizinhos().keySet()) {
-    // if (!solucao.contains(vizinho)) {
-    // solucao.add(vizinho);
-
-    // if (cicloHamiltoniano(solucao, vizinho)) {
-    // return true;
-    // }
-
-    // solucao.remove(vizinho);
-    // }
-    // }
-
-    // return false;
-    // }
+    
+    private Cidade encontrarCidadeMaisProxima(Cidade origem, Set<Cidade> visitadas) {
+        Cidade cidadeMaisProxima = null;
+        int distanciaMinima = Integer.MAX_VALUE;
+    
+        for (Cidade cidade : cidades) {
+            if (!visitadas.contains(cidade) && !cidade.equals(origem)) {
+                int distancia = origem.getVizinhos().getOrDefault(cidade, Integer.MAX_VALUE);
+                if (distancia < distanciaMinima) {
+                    distanciaMinima = distancia;
+                    cidadeMaisProxima = cidade;
+                }
+            }
+        }
+    
+        return cidadeMaisProxima;
+    }
+    
 
     public Cidade buscarCidadePorNome(String nome) {
         if (nome == null) {
@@ -258,96 +194,4 @@ public class Grafo {
         }
         return null; // Retorna null se a cidade não for encontrada
     }
-
-    // public Cidade encontrarCidadeMaisProxima(Cidade origem) {
-    // Map<Cidade, Integer> distancias = new HashMap<>();
-    // Set<Cidade> visitadas = new HashSet<>();
-
-    // // Inicializa as distâncias com um valor máximo (infinito)
-    // for (Cidade cidade : cidades) {
-    // distancias.put(cidade, Integer.MAX_VALUE);
-    // }
-
-    // // A distância da cidade de origem para ela mesma é zero
-    // distancias.put(origem, 0);
-
-    // while (!visitadas.containsAll(cidades)) {
-    // Cidade cidadeMaisProxima = null;
-    // int distanciaMinima = Integer.MAX_VALUE;
-
-    // for (Cidade cidade : cidades) {
-    // if (!visitadas.contains(cidade) && distancias.get(cidade) < distanciaMinima)
-    // {
-    // cidadeMaisProxima = cidade;
-    // distanciaMinima = distancias.get(cidade);
-    // }
-    // }
-
-    // if (cidadeMaisProxima == null) {
-    // break; // Todas as cidades inalcançáveis foram visitadas
-    // }
-
-    // visitadas.add(cidadeMaisProxima);
-
-    // for (Map.Entry<Cidade, Integer> vizinhoEntry :
-    // cidadeMaisProxima.vizinhos.entrySet()) {
-    // Cidade vizinho = vizinhoEntry.getKey();
-    // int pesoAresta = vizinhoEntry.getValue();
-    // int distanciaTotal = distancias.get(cidadeMaisProxima) + pesoAresta;
-
-    // if (distanciaTotal < distancias.get(vizinho)) {
-    // distancias.put(vizinho, distanciaTotal);
-    // }
-    // }
-    // }
-
-    // // Encontre a cidade mais próxima que ainda não foi visitada
-    // Cidade cidadeMaisProximaNaoVisitada = null;
-    // int distanciaMinimaNaoVisitada = Integer.MAX_VALUE;
-
-    // for (Cidade cidade : cidades) {
-    // if (!visitadas.contains(cidade) && distancias.get(cidade) <
-    // distanciaMinimaNaoVisitada) {
-    // cidadeMaisProximaNaoVisitada = cidade;
-    // distanciaMinimaNaoVisitada = distancias.get(cidade);
-    // }
-    // }
-
-    // return cidadeMaisProximaNaoVisitada;
-    // }
-
-    // public boolean isHamiltoniano(List<Cidade> rota) {
-    // Set<Cidade> visitadas = new HashSet<>(rota);
-
-    // if (visitadas.size() != cidades.size() + 1) {
-    // return false;
-    // }
-
-    // if (!rota.get(0).equals(rota.get(rota.size() - 1))) {
-    // return false;
-    // }
-
-    // Set<Cidade> cidadesVisitadas = new HashSet<>(rota);
-    // Cidade cidadeAnterior = null;
-
-    // for (Cidade cidade : rota) {
-    // if (cidadeAnterior != null && !cidadeAnterior.vizinhos.containsKey(cidade)) {
-    // return false;
-    // }
-
-    // cidadeAnterior = cidade;
-    // }
-
-    // return cidadesVisitadas.size() == cidades.size();
-    // }
-
-    // public List<Cidade> obterTodasAsCidades() {
-    // List<Cidade> todasAsCidades = new ArrayList<>();
-
-    // for (Cidade cidade : cidades) {
-    // todasAsCidades.add(cidade);
-    // }
-
-    // return todasAsCidades;
-    // }
 }

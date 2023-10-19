@@ -90,8 +90,8 @@ public class Main {
         do {
             System.out.println("Escolha uma opção:");
             System.out.println("1 - Verificar existência de estrada entre cidades.");
-            System.out.println("2 - Identificar cidades diretamente inacessíveis a partir da cidade sede.");
-            System.out.println("3 - Identificar cidades completamente inacessíveis a partir da cidade sede.");
+            System.out.println("2 - Listar cidades diretamente inacessíveis a partir da cidade sede.");
+            System.out.println("3 - Listar cidades completamente inacessíveis a partir da cidade sede.");
             System.out.println("4 - Recomendar visitação a todas as cidades a partir da cidade sede.");
             System.out.println("5 - Recomendar rota para um passageiro que deseja visitar todas as cidades.");
             System.out.println("6 - Sair");
@@ -169,7 +169,7 @@ public class Main {
 
                 case 4:
                     // CORRIGIR CASO ESTEJA ERRADO TANTO NO MAIN QUANTO NO METODO
-                    
+
                     sc = new Scanner(System.in);
                     // Perguntar ao usuário de qual cidade eles gostariam de começar a visitação
                     System.out.println("De qual cidade você gostaria de começar a visitação?");
@@ -191,46 +191,56 @@ public class Main {
                     sc = new Scanner(System.in);
                     // Perguntar ao usuário de qual cidade eles gostariam de começar a visitação
                     System.out.println("De qual cidade você gostaria de começar a visitação?");
+
                     nomeCidadeInicial = sc.nextLine();
 
                     cidadeSede = grafo.buscarCidadePorNome(nomeCidadeInicial);
 
                     if (cidadeSede != null) {
-                        // Visitar todas as cidades a partir da cidade escolhida pelo usuário
 
-                        // Obter a rota recomendada
-                        List<Aresta> rota = grafo.rotaHamiltoniana(nomeCidadeInicial);
+                        List<Cidade> rota = grafo.encontrarCicloHamiltoniano(cidadeSede);
 
-                        // Imprimir a rota e calcular a distância total
-                        String soma = "";
-                        int distanciaTotal = 0;
-                        for (Aresta aresta : rota) {
-                            System.out.println(
-                                    aresta.getOrigem() + " -> " + aresta.getDestino() + " (" + aresta.getPeso() + ")");
-                            // System.out.println("Soma das distancias: " + aresta.getPeso() + ": ");
-                        }
+                        if (rota != null) {
 
-                        System.out.print("Soma das distancias: ");
+                            String soma = "";
 
-                        for (Aresta aresta : rota) {
+                            int distanciaTotal = 0;
 
-                            if (!soma.isEmpty()) {
-                                soma += " + ";
+                            for (int i = 0; i < rota.size(); i++) {
+
+                                Cidade origem = rota.get(i);
+
+                                Cidade destino = rota.get((i + 1) % rota.size()); // Para retornar à cidade sede
+
+                                int distancia = origem.getVizinhos().get(destino);
+
+                                System.out.println(
+                                        origem.getNome() + " -> " + destino.getNome() + " (" + distancia + " KM)");
+
+                                if (!soma.isEmpty()) {
+
+                                    soma += " + ";
+
+                                }
+
+                                soma += distancia;
+
+                                distanciaTotal += distancia;
+
                             }
-                            soma += aresta.getPeso();
-                            distanciaTotal += aresta.getPeso();
+
+                            System.out.print("Soma das distâncias: " + soma + " = " + distanciaTotal + " KM\n");
+                            System.out.println("Distância total: " + distanciaTotal + " KM");
+                        } else {
+                            System.out.println(
+                                    "Não foi possível encontrar um ciclo Hamiltoniano a partir da cidade sede.");
                         }
-
-                        //soma += " = " + distanciaTotal;
-
-                        System.out.println(soma);
-
-                        System.out.println("Distância total: " + distanciaTotal + " KM");
                     } else {
                         System.out.println("Cidade não encontrada!");
                     }
 
                     break;
+
                 case 6:
                     System.out.println("Saindo do programa.");
                     break;
