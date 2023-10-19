@@ -193,7 +193,7 @@ public class Main {
                         distanciaTotal += aresta.getPeso();
                     }
 
-                    System.out.println("Distância total: " + distanciaTotal);
+                    System.out.println("Distância total: " + distanciaTotal + " KM");
                     break;
                 case 6:
                     System.out.println("Saindo do programa.");
