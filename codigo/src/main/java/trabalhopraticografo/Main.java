@@ -196,7 +196,7 @@ public class Main {
                     System.out.println("Saindo do programa.");
                     break;
                 default:
-                    System.out.println("Opção inválida. Digite um número de 1 a 5.");
+                    System.out.println("Opção inválida. Digite um número de 1 a 6.");
             }
         } while (escolha != 6);
 
