@@ -4,8 +4,14 @@ public class Aresta {
     Cidade origem;
     Cidade destino;
     int peso;
-    
+
     public Aresta(Cidade origem, Cidade destino, int peso) {
+        if (origem == null || destino == null) {
+            throw new IllegalArgumentException("Origem e destino não podem ser nulos");
+        }
+        if (peso < 0) {
+            throw new IllegalArgumentException("Peso não pode ser negativo");
+        }
         this.origem = origem;
         this.destino = destino;
         this.peso = peso;

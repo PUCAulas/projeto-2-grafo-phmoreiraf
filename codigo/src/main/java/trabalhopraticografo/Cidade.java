@@ -47,6 +47,9 @@ public class Cidade {
     //Requisito c
     
     public void visitarTodas(HashSet<Cidade> visitadas) {
+        if (visitadas == null) {
+            throw new IllegalArgumentException("O conjunto de cidades visitadas não pode ser nulo");
+        }
         visitadas.add(this);
         System.out.println("Visitando: " + this.getNome());
         for (Cidade vizinho : this.getVizinhos().keySet()) {

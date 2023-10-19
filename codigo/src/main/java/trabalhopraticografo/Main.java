@@ -206,9 +206,10 @@ public class Main {
                             System.out.println(
                                     aresta.getOrigem() + " -> " + aresta.getDestino() + " (" + aresta.getPeso() + ")");
                             distanciaTotal += aresta.getPeso();
+                            System.out.println("Soma das distancias: " + aresta.getPeso() + ": ");
                         }
 
-                        System.out.println("Distância total: " + distanciaTotal + " KM");
+                        System.out.print("Distância total: " + distanciaTotal + " KM");
                     } else {
                         System.out.println("Cidade não encontrada!");
                     }
