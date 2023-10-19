@@ -201,15 +201,30 @@ public class Main {
                         List<Aresta> rota = grafo.rotaHamiltoniana(nomeCidadeInicial);
 
                         // Imprimir a rota e calcular a distância total
+                        String soma = "";
                         int distanciaTotal = 0;
                         for (Aresta aresta : rota) {
                             System.out.println(
                                     aresta.getOrigem() + " -> " + aresta.getDestino() + " (" + aresta.getPeso() + ")");
-                            distanciaTotal += aresta.getPeso();
-                            System.out.println("Soma das distancias: " + aresta.getPeso() + ": ");
+                            // System.out.println("Soma das distancias: " + aresta.getPeso() + ": ");
                         }
 
-                        System.out.print("Distância total: " + distanciaTotal + " KM");
+                        System.out.print("Soma das distancias: ");
+
+                        for (Aresta aresta : rota) {
+
+                            if (!soma.isEmpty()) {
+                                soma += " + ";
+                            }
+                            soma += aresta.getPeso();
+                            distanciaTotal += aresta.getPeso();
+                        }
+
+                        //soma += " = " + distanciaTotal;
+
+                        System.out.println(soma);
+
+                        System.out.println("Distância total: " + distanciaTotal + " KM");
                     } else {
                         System.out.println("Cidade não encontrada!");
                     }
