@@ -79,8 +79,7 @@ public class Grafo {
         return inacessiveis;
     }
 
-    // Requisito (b): Listar todas as cidades inacessíveis a partir de uma cidade
-    // sede
+    // Requisito (b): Listar todas as cidades inacessíveis a partir de uma cidade sede
     public List<Cidade> cidadesCompletamenteInacessiveis(Cidade cidadeSede) {
         List<Cidade> inacessiveis = new ArrayList<>();
 
@@ -131,8 +130,47 @@ public class Grafo {
         }
     }
 
-    // Requisito (d): Recomendar uma rota para um passageiro que deseja visitar
-    // todas as cidades.
+    // Requisito (d): Recomendar uma rota para um passageiro que deseja visitar todas as cidades.
+
+    public List<Cidade> encontrarCaminhoHamiltoniano(Cidade inicio) {
+        List<Cidade> caminho = new ArrayList<>();
+        if (encontrarCaminhoHamiltoniano(inicio, caminho, getCidades().size())) {
+            return caminho;
+        } else {
+            System.out.println("Nenhum caminho hamiltoniano encontrado.");
+            return null;
+        }
+    }
+
+    private boolean encontrarCaminhoHamiltoniano(Cidade cidadeAtual, List<Cidade> caminho, int totalCidades) {
+        caminho.add(cidadeAtual);
+
+        if (caminho.size() == totalCidades) {
+            return true;
+        }
+
+        for (Cidade vizinho : cidadeAtual.getVizinhos().keySet()) {
+            if (!caminho.contains(vizinho)) {
+                if (encontrarCaminhoHamiltoniano(vizinho, caminho, totalCidades)) {
+                    return true;
+                }
+            }
+        }
+
+        caminho.remove(cidadeAtual);
+        return false;
+    }
+
+    public int calcularPesoCaminho(List<Cidade> caminho) {
+        int pesoTotal = 0;
+        for (int i = 0; i < caminho.size() - 1; i++) {
+            Cidade cidadeAtual = caminho.get(i);
+            Cidade proximaCidade = caminho.get(i + 1);
+            pesoTotal += cidadeAtual.getVizinhos().get(proximaCidade);
+        }
+        return pesoTotal;
+    }
+
 
     public List<Aresta> rotaHamiltoniana(String nomeCidadeInicial) {
         List<Aresta> rota = new ArrayList<>();

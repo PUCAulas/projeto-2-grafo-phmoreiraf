@@ -81,29 +81,50 @@ public class GrafoTest {
         assertTrue(inacessiveis.contains(cidadeC));
     }
 
-    // @Test
-    // public void testRecomendarVisitaTodasCidades() {
-    // grafo.adicionarCidade(cidadeA);
-    // grafo.adicionarCidade(cidadeB);
-    // grafo.adicionarCidade(cidadeC);
+    @Test
+    public void testEncontrarCaminhoHamiltoniano() {
 
-    // List<Cidade> caminhoMinimo = grafo.recomendarVisitaTodasCidades(cidadeA);
+        grafo.adicionarCidade(cidadeA);
+        grafo.adicionarCidade(cidadeB);
+        grafo.adicionarCidade(cidadeC);
 
-    // // Implemente este teste com base na sua implementação do método
-    // // recomendarVisitaTodasCidades
-    // }
+        Aresta aresta1 = new Aresta(cidadeA, cidadeB, 1);
+        Aresta aresta2 = new Aresta(cidadeB, cidadeC, 1);
+        Aresta aresta3 = new Aresta(cidadeC, cidadeA, 1);
 
-    // @Test
-    // public void testRotaHamiltoniana() {
-    // grafo.adicionarCidade(cidadeA);
-    // grafo.adicionarCidade(cidadeB);
-    // grafo.adicionarCidade(cidadeC);
-    // grafo.adicionarAresta(new Aresta(cidadeA, cidadeB, 100));
-    // grafo.adicionarAresta(new Aresta(cidadeB, cidadeC, 200));
+        grafo.adicionarAresta(aresta1);
+        grafo.adicionarAresta(aresta2);
+        grafo.adicionarAresta(aresta3);
 
-    // List<Aresta> rota = grafo.rotaHamiltoniana(cidadeA.getNome());
+        List<Cidade> caminhoEsperado = Arrays.asList(cidadeA, cidadeC, cidadeB);
+        List<Cidade> caminhoReal = grafo.encontrarCaminhoHamiltoniano(cidadeA);
 
-    // // Implemente este teste com base na sua implementação do método
-    // // rotaHamiltoniana
-    // }
+        assertEquals(caminhoEsperado, caminhoReal);
+    }
 }
+
+// @Test
+// public void testRecomendarVisitaTodasCidades() {
+// grafo.adicionarCidade(cidadeA);
+// grafo.adicionarCidade(cidadeB);
+// grafo.adicionarCidade(cidadeC);
+
+// List<Cidade> caminhoMinimo = grafo.recomendarVisitaTodasCidades(cidadeA);
+
+// // Implemente este teste com base na sua implementação do método
+// // recomendarVisitaTodasCidades
+// }
+
+// @Test
+// public void testRotaHamiltoniana() {
+// grafo.adicionarCidade(cidadeA);
+// grafo.adicionarCidade(cidadeB);
+// grafo.adicionarCidade(cidadeC);
+// grafo.adicionarAresta(new Aresta(cidadeA, cidadeB, 100));
+// grafo.adicionarAresta(new Aresta(cidadeB, cidadeC, 200));
+
+// List<Aresta> rota = grafo.rotaHamiltoniana(cidadeA.getNome());
+
+// // Implemente este teste com base na sua implementação do método
+// // rotaHamiltoniana
+// }

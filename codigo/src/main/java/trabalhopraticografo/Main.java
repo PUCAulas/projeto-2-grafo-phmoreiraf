@@ -8,6 +8,7 @@ public class Main {
     public static void main(String[] args) {
         // Nome do arquivo de entrada
         Scanner scanner1 = new Scanner(System.in);
+        
 
         String arquivoEntrada = "";
         int numArquivo;
@@ -188,43 +189,80 @@ public class Main {
                 case 5:
                     // COLOCAR CIDADE SEDE NO METODO E USAR O SCANNER NO MAIN
                     sc = new Scanner(System.in);
-                    // Perguntar ao usuário de qual cidade eles gostariam de começar a visitação
-                    System.out.println("De qual cidade você gostaria de começar a visitação?");
+
+                    // Encontrar e imprimir o caminho hamiltoniano
+                    System.out.println("Insira o nome da cidade inicial:");
                     nomeCidadeInicial = sc.nextLine();
-                    cidadeSede = grafo.buscarCidadePorNome(nomeCidadeInicial);
-                    if (cidadeSede != null) {
-                        // Visitar todas as cidades a partir da cidade escolhida pelo usuário
-                        // Obter a rota recomendada
-                        List<Aresta> rota = grafo.rotaHamiltoniana(nomeCidadeInicial);
+                    Cidade cidadeInicial = grafo.buscarCidadePorNome(nomeCidadeInicial);
 
-                        // Imprimir a rota e calcular a distância total
-                        String soma = "";
-                        int distanciaTotal = 0;
-                        for (Aresta aresta : rota) {
+                    List<Cidade> caminhoHamiltoniano = grafo.encontrarCaminhoHamiltoniano(cidadeInicial);
+
+                    if (caminhoHamiltoniano != null) {
+                        System.out.println("Caminho Hamiltoniano encontrado:");
+                        int pesoTotal = 0;
+                        StringBuilder somaPesos = new StringBuilder();
+                        for (int i = 0; i < caminhoHamiltoniano.size() - 1; i++) {
+                            Cidade cidadeAtual = caminhoHamiltoniano.get(i);
+                            Cidade proximaCidade = caminhoHamiltoniano.get(i + 1);
+                            int peso = cidadeAtual.getVizinhos().get(proximaCidade);
                             System.out.println(
-                                    aresta.getOrigem() + " -> " + aresta.getDestino() + " (" + aresta.getPeso() + ")");
-                            // System.out.println("Soma das distancias: " + aresta.getPeso() + ": ");
-                        }
+                                    cidadeAtual.getNome() + " -> " + proximaCidade.getNome() + " (" + peso + ")");
 
-                        System.out.print("Soma das distancias: ");
+                                    pesoTotal += peso;
 
-                        for (Aresta aresta : rota) {
+                                    somaPesos.append(peso);
 
-                            if (!soma.isEmpty()) {
-                                soma += " + ";
-                            }
-                            soma += aresta.getPeso();
-                            distanciaTotal += aresta.getPeso();
-                        }
+                                    if(i < caminhoHamiltoniano.size() - 2){
+                                        somaPesos.append(" + ");
+                                    }
+                        };
 
-                        // soma += " = " + distanciaTotal;
-
-                        System.out.println(soma);
-
-                        System.out.println("Distância total: " + distanciaTotal + " KM");
-                    } else {
-                        System.out.println("Cidade não encontrada!");
+                        System.out.println("\nAgora, somando todas essas distâncias:");
+                        System.out.println("Custo total = " + somaPesos.toString() + " = " + pesoTotal + " quilômetros.");
                     }
+
+                    else {
+                        System.out.println("A cidade inicial não foi encontrada no grafo.");
+                    }
+
+                    // // Perguntar ao usuário de qual cidade eles gostariam de começar a visitação
+                    // System.out.println("De qual cidade você gostaria de começar a visitação?");
+                    // nomeCidadeInicial = sc.nextLine();
+                    // cidadeSede = grafo.buscarCidadePorNome(nomeCidadeInicial);
+                    // if (cidadeSede != null) {
+                    // // Visitar todas as cidades a partir da cidade escolhida pelo usuário
+                    // // Obter a rota recomendada
+                    // List<Aresta> rota = grafo.rotaHamiltoniana(nomeCidadeInicial);
+
+                    // // Imprimir a rota e calcular a distância total
+                    // String soma = "";
+                    // int distanciaTotal = 0;
+                    // for (Aresta aresta : rota) {
+                    // System.out.println(
+                    // aresta.getOrigem() + " -> " + aresta.getDestino() + " (" + aresta.getPeso() +
+                    // ")");
+                    // // System.out.println("Soma das distancias: " + aresta.getPeso() + ": ");
+                    // }
+
+                    // System.out.print("Soma das distancias: ");
+
+                    // for (Aresta aresta : rota) {
+
+                    // if (!soma.isEmpty()) {
+                    // soma += " + ";
+                    // }
+                    // soma += aresta.getPeso();
+                    // distanciaTotal += aresta.getPeso();
+                    // }
+
+                    // // soma += " = " + distanciaTotal;
+
+                    // System.out.println(soma);
+
+                    // System.out.println("Distância total: " + distanciaTotal + " KM");
+                    // } else {
+                    // System.out.println("Cidade não encontrada!");
+                    // }
                     break;
 
                 case 6:
