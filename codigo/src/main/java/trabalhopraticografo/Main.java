@@ -9,7 +9,6 @@ public class Main {
         // Nome do arquivo de entrada
         Scanner scanner1 = new Scanner(System.in);
         
-
         String arquivoEntrada = "";
         int numArquivo;
         String nomeCidadeInicial;
@@ -29,7 +28,7 @@ public class Main {
         } else {
             System.out.println("Digite entre os arquivos (1 a 4");
         }
-
+        
         Grafo grafo = new Grafo();
         Cidade cidadeOrigem;
 
