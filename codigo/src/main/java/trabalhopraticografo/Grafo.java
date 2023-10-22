@@ -159,6 +159,9 @@ public class Grafo {
             }
         }
 
+        // Poda: se nenhum caminho hamiltoniano pôde ser encontrado a partir desta
+        // cidade,
+        // remova-a do caminho e retorne false.
         caminho.remove(cidadeAtual);
         return false;
     }

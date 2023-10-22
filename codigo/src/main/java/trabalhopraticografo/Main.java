@@ -2,6 +2,7 @@ package trabalhopraticografo;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
@@ -40,7 +41,6 @@ public class Main {
                 String linha = scanner.nextLine();
                 String[] partes = linha.split(":");
                 String nomeCidadeOrigem = partes[0].trim();
-                String[] conexoes = partes[1].split(",");
 
                 // Criar a cidade de origem
                 cidadeOrigem = grafo.buscarCidadePorNome(nomeCidadeOrigem);
@@ -48,6 +48,11 @@ public class Main {
                     cidadeOrigem = new Cidade(nomeCidadeOrigem);
                     grafo.adicionarCidade(cidadeOrigem);
                 }
+
+                // Use uma expressão regular para dividir a segunda parte da linha em várias
+                // partes
+                Pattern pattern = Pattern.compile("\\s*,\\s*(?![^\\(]*\\))");
+                String[] conexoes = pattern.split(partes[1]);
 
                 // Processar as conexões da cidade de origem
                 for (String conexao : conexoes) {
@@ -78,7 +83,8 @@ public class Main {
                     grafo.adicionarAresta(aresta);
                 }
             }
-            //scanner.close();
+
+            // scanner.close();
         } catch (FileNotFoundException e) {
             System.err.println("Arquivo não encontrado: " + arquivoEntrada);
         }
@@ -192,7 +198,7 @@ public class Main {
                     System.out.println("Insira o nome da cidade inicial:");
                     nomeCidadeInicial = sc.nextLine();
                     Cidade cidadeInicial = grafo.buscarCidadePorNome(nomeCidadeInicial);
-                    //System.out.println(cidadeInicial);
+                    // System.out.println(cidadeInicial);
 
                     if (cidadeInicial != null) {
                         List<Cidade> caminhoHamiltoniano = grafo.encontrarCaminhoHamiltoniano(cidadeInicial);
