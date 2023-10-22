@@ -79,7 +79,8 @@ public class Grafo {
         return inacessiveis;
     }
 
-    // Requisito (b): Listar todas as cidades inacessíveis a partir de uma cidade sede
+    // Requisito (b): Listar todas as cidades inacessíveis a partir de uma cidade
+    // sede
     public List<Cidade> cidadesCompletamenteInacessiveis(Cidade cidadeSede) {
         List<Cidade> inacessiveis = new ArrayList<>();
 
@@ -130,7 +131,8 @@ public class Grafo {
         }
     }
 
-    // Requisito (d): Recomendar uma rota para um passageiro que deseja visitar todas as cidades.
+    // Requisito (d): Recomendar uma rota para um passageiro que deseja visitar
+    // todas as cidades.
 
     public List<Cidade> encontrarCaminhoHamiltoniano(Cidade inicio) {
         List<Cidade> caminho = new ArrayList<>();
@@ -170,7 +172,6 @@ public class Grafo {
         }
         return pesoTotal;
     }
-
 
     public List<Aresta> rotaHamiltoniana(String nomeCidadeInicial) {
         List<Aresta> rota = new ArrayList<>();

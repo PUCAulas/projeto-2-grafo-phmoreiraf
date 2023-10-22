@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         // Nome do arquivo de entrada
         Scanner scanner1 = new Scanner(System.in);
-        
+
         String arquivoEntrada = "";
         int numArquivo;
         String nomeCidadeInicial;
@@ -27,7 +27,7 @@ public class Main {
         } else {
             System.out.println("Digite entre os arquivos (1 a 4");
         }
-        
+
         Grafo grafo = new Grafo();
         Cidade cidadeOrigem;
 
@@ -78,7 +78,7 @@ public class Main {
                     grafo.adicionarAresta(aresta);
                 }
             }
-            scanner.close();
+            //scanner.close();
         } catch (FileNotFoundException e) {
             System.err.println("Arquivo não encontrado: " + arquivoEntrada);
         }
@@ -192,35 +192,39 @@ public class Main {
                     System.out.println("Insira o nome da cidade inicial:");
                     nomeCidadeInicial = sc.nextLine();
                     Cidade cidadeInicial = grafo.buscarCidadePorNome(nomeCidadeInicial);
+                    //System.out.println(cidadeInicial);
 
-                    List<Cidade> caminhoHamiltoniano = grafo.encontrarCaminhoHamiltoniano(cidadeInicial);
+                    if (cidadeInicial != null) {
+                        List<Cidade> caminhoHamiltoniano = grafo.encontrarCaminhoHamiltoniano(cidadeInicial);
+                        if (caminhoHamiltoniano != null) {
+                            System.out.println("Caminho Hamiltoniano encontrado:");
+                            int pesoTotal = 0;
+                            StringBuilder somaPesos = new StringBuilder();
+                            for (int i = 0; i < caminhoHamiltoniano.size() - 1; i++) {
+                                Cidade cidadeAtual = caminhoHamiltoniano.get(i);
+                                Cidade proximaCidade = caminhoHamiltoniano.get(i + 1);
+                                int peso = cidadeAtual.getVizinhos().get(proximaCidade);
+                                System.out.println(
+                                        cidadeAtual.getNome() + " -> " + proximaCidade.getNome() + " (" + peso + ")");
 
-                    if (caminhoHamiltoniano != null) {
-                        System.out.println("Caminho Hamiltoniano encontrado:");
-                        int pesoTotal = 0;
-                        StringBuilder somaPesos = new StringBuilder();
-                        for (int i = 0; i < caminhoHamiltoniano.size() - 1; i++) {
-                            Cidade cidadeAtual = caminhoHamiltoniano.get(i);
-                            Cidade proximaCidade = caminhoHamiltoniano.get(i + 1);
-                            int peso = cidadeAtual.getVizinhos().get(proximaCidade);
+                                pesoTotal += peso;
+
+                                somaPesos.append(peso);
+
+                                if (i < caminhoHamiltoniano.size() - 2) {
+                                    somaPesos.append(" + ");
+                                }
+                            }
+                            ;
+
+                            System.out.println("\nAgora, somando todas essas distâncias:");
                             System.out.println(
-                                    cidadeAtual.getNome() + " -> " + proximaCidade.getNome() + " (" + peso + ")");
-
-                                    pesoTotal += peso;
-
-                                    somaPesos.append(peso);
-
-                                    if(i < caminhoHamiltoniano.size() - 2){
-                                        somaPesos.append(" + ");
-                                    }
-                        };
-
-                        System.out.println("\nAgora, somando todas essas distâncias:");
-                        System.out.println("Custo total = " + somaPesos.toString() + " = " + pesoTotal + " quilômetros.");
-                    }
-
-                    else {
-                        System.out.println("A cidade inicial não foi encontrada no grafo.");
+                                    "Custo total = " + somaPesos.toString() + " = " + pesoTotal + " quilômetros.");
+                        } else {
+                            System.out.println("A cidade inicial não foi encontrada no grafo.");
+                        }
+                    } else {
+                        System.out.println("A cidade inicial não foi encontrada.");
                     }
 
                     // // Perguntar ao usuário de qual cidade eles gostariam de começar a visitação
