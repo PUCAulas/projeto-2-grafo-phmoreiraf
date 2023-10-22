@@ -176,6 +176,41 @@ public class Grafo {
         return pesoTotal;
     }
 
+    //ALTERNATIVO
+
+    public List<Cidade> encontrarCaminhoHamiltonianoAproximado(Cidade inicio) {
+        List<Cidade> caminho = new ArrayList<>();
+        Set<Cidade> visitadas = new HashSet<>();
+        visitadas.add(inicio);
+        dfs(inicio, inicio, visitadas, caminho, getCidades().size());
+        return caminho;
+    }
+    
+    private void dfs(Cidade atual, Cidade inicio, Set<Cidade> visitadas, List<Cidade> caminho, int totalCidades) {
+        caminho.add(atual);
+    
+        if (caminho.size() == totalCidades) {
+            // Se todas as cidades foram visitadas, retorne ao início para completar o ciclo
+            caminho.add(inicio);
+            return;
+        }
+    
+        for (Cidade vizinho : atual.getVizinhos().keySet()) {
+            if (!visitadas.contains(vizinho)) {
+                visitadas.add(vizinho);
+                dfs(vizinho, inicio, visitadas, caminho, totalCidades);
+                if (caminho.size() == totalCidades + 1) { // Se todas as cidades foram visitadas
+                    return;
+                }
+                // Se não encontramos um caminho válido a partir deste vizinho,
+                // remova-o do conjunto de cidades visitadas e do caminho atual
+                visitadas.remove(vizinho);
+                caminho.remove(caminho.size() - 1);
+            }
+        }
+    }
+    
+
     public List<Aresta> rotaHamiltoniana(String nomeCidadeInicial) {
         List<Aresta> rota = new ArrayList<>();
         Set<Cidade> visitadas = new HashSet<>();

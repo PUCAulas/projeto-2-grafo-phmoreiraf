@@ -201,37 +201,73 @@ public class Main {
                     // System.out.println(cidadeInicial);
 
                     if (cidadeInicial != null) {
-                        List<Cidade> caminhoHamiltoniano = grafo.encontrarCaminhoHamiltoniano(cidadeInicial);
+                        List<Cidade> caminhoHamiltoniano = grafo.encontrarCaminhoHamiltonianoAproximado(cidadeInicial);
                         if (caminhoHamiltoniano != null) {
-                            System.out.println("Caminho Hamiltoniano encontrado:");
+                            System.out.println("Caminho Hamiltoniano aproximado encontrado:");
                             int pesoTotal = 0;
                             StringBuilder somaPesos = new StringBuilder();
                             for (int i = 0; i < caminhoHamiltoniano.size() - 1; i++) {
                                 Cidade cidadeAtual = caminhoHamiltoniano.get(i);
                                 Cidade proximaCidade = caminhoHamiltoniano.get(i + 1);
-                                int peso = cidadeAtual.getVizinhos().get(proximaCidade);
-                                System.out.println(
-                                        cidadeAtual.getNome() + " -> " + proximaCidade.getNome() + " (" + peso + ")");
-
-                                pesoTotal += peso;
-
-                                somaPesos.append(peso);
-
-                                if (i < caminhoHamiltoniano.size() - 2) {
-                                    somaPesos.append(" + ");
+                                if (cidadeAtual.getVizinhos().containsKey(proximaCidade)) {
+                                    int peso = cidadeAtual.getVizinhos().get(proximaCidade);
+                                    System.out.println(cidadeAtual.getNome() + " -> " + proximaCidade.getNome() + " ("
+                                            + peso + ")");
+                                    pesoTotal += peso;
+                                    somaPesos.append(peso);
+                                    if (i < caminhoHamiltoniano.size() - 2) {
+                                        somaPesos.append(" + ");
+                                    }
+                                } else {
+                                    System.out.println("A cidade " + proximaCidade.getNome() + " não é vizinha de "
+                                            + cidadeAtual.getNome());
                                 }
                             }
-                            ;
-
                             System.out.println("\nAgora, somando todas essas distâncias:");
                             System.out.println(
                                     "Custo total = " + somaPesos.toString() + " = " + pesoTotal + " quilômetros.");
                         } else {
-                            System.out.println("A cidade inicial não foi encontrada no grafo.");
+                            System.out.println("Nenhum caminho hamiltoniano aproximado encontrado.");
                         }
                     } else {
                         System.out.println("A cidade inicial não foi encontrada.");
                     }
+
+                    //PARTE ALTERADA
+
+//                     if (cidadeInicial != null) {
+//                         List<Cidade> caminhoHamiltoniano = grafo.encontrarCaminhoHamiltoniano(cidadeInicial);
+//                         if (caminhoHamiltoniano != null) {
+//                             System.out.println("Caminho Hamiltoniano encontrado:");
+//                             int pesoTotal = 0;
+//                             StringBuilder somaPesos = new StringBuilder();
+//                             for (int i = 0; i < caminhoHamiltoniano.size() - 1; i++) {
+//                                 Cidade cidadeAtual = caminhoHamiltoniano.get(i);
+//                                 Cidade proximaCidade = caminhoHamiltoniano.get(i + 1);
+//                                 int peso = cidadeAtual.getVizinhos().get(proximaCidade);
+//                                 System.out.println(
+//                                         cidadeAtual.getNome() + " -> " + proximaCidade.getNome() + " (" + peso + ")");
+
+//                                 pesoTotal += peso;
+
+//                                 somaPesos.append(peso);
+
+//                                 if (i < caminhoHamiltoniano.size() - 2) {
+//                                     somaPesos.append(" + ");
+//                                 }
+//                             }
+//                             ;
+
+//                             System.out.println("\nAgora, somando todas essas distâncias:");
+//                             System.out.println(
+//                                     "Custo total = " + somaPesos.toString() + " = " + pesoTotal + " quilômetros.");
+//                         } else {
+//                             System.out.println("A cidade inicial não foi encontrada no grafo.");
+//                         }
+//                     } else {
+//                         System.out.println("A cidade inicial não foi encontrada.");
+//                     }
+// break;
 
                     // // Perguntar ao usuário de qual cidade eles gostariam de começar a visitação
                     // System.out.println("De qual cidade você gostaria de começar a visitação?");
