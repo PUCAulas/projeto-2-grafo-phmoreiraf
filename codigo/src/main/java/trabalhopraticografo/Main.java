@@ -14,7 +14,7 @@ public class Main {
         String nomeCidadeInicial;
 
         System.out.println(
-                "Selecione o arquivo que deseja usar: (1 - registro.txt, 2 - cidades.txt, 3 - cidades2.txt, 4 - hamiltoniano.txt) ");
+                "Selecione o arquivo que deseja usar: (1 - registro.txt, 2 - cidades.txt, 3 - cidades2.txt, 4 - cidades10.txt, 5 - cidades10-hamilton.txt) ");
         numArquivo = scanner1.nextInt();
 
         if (numArquivo == 1) {
@@ -24,9 +24,11 @@ public class Main {
         } else if (numArquivo == 3) {
             arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/cidades2.txt";
         } else if (numArquivo == 4) {
-            arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/hamiltoniano.txt";
-        } else {
-            System.out.println("Digite entre os arquivos (1 a 4");
+            arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/cidades10.txt";
+        } else if (numArquivo == 5) {
+            arquivoEntrada = "codigo/src/main/java/trabalhopraticografo/arquivo/cidades10-hamilton.txt";
+        }else {
+            System.out.println("Digite entre os arquivos (1 a 5");
         }
 
         Grafo grafo = new Grafo();
@@ -84,7 +86,7 @@ public class Main {
                 }
             }
 
-            // scanner.close();
+            scanner.close();
         } catch (FileNotFoundException e) {
             System.err.println("Arquivo não encontrado: " + arquivoEntrada);
         }
