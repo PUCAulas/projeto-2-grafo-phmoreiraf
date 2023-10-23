@@ -211,41 +211,41 @@ public class Grafo {
     }
     
 
-    public List<Aresta> rotaHamiltoniana(String nomeCidadeInicial) {
-        List<Aresta> rota = new ArrayList<>();
-        Set<Cidade> visitadas = new HashSet<>();
-        Cidade atual = null;
+    // public List<Aresta> rotaHamiltoniana(String nomeCidadeInicial) {
+    //     List<Aresta> rota = new ArrayList<>();
+    //     Set<Cidade> visitadas = new HashSet<>();
+    //     Cidade atual = null;
 
-        // Procurar a cidade inicial na lista de cidades
-        for (Cidade cidade : getCidades()) {
-            if (cidade.getNome().equals(nomeCidadeInicial)) {
-                atual = cidade;
-                break;
-            }
-        }
+    //     // Procurar a cidade inicial na lista de cidades
+    //     for (Cidade cidade : getCidades()) {
+    //         if (cidade.getNome().equals(nomeCidadeInicial)) {
+    //             atual = cidade;
+    //             break;
+    //         }
+    //     }
 
-        while (atual != null) {
-            visitadas.add(atual);
+    //     while (atual != null) {
+    //         visitadas.add(atual);
 
-            Cidade proxima = null;
-            int menorDistancia = Integer.MAX_VALUE;
+    //         Cidade proxima = null;
+    //         int menorDistancia = Integer.MAX_VALUE;
 
-            for (Map.Entry<Cidade, Integer> entry : atual.getVizinhos().entrySet()) {
-                if (!visitadas.contains(entry.getKey()) && entry.getValue() < menorDistancia) {
-                    proxima = entry.getKey();
-                    menorDistancia = entry.getValue();
-                }
-            }
+    //         for (Map.Entry<Cidade, Integer> entry : atual.getVizinhos().entrySet()) {
+    //             if (!visitadas.contains(entry.getKey()) && entry.getValue() < menorDistancia) {
+    //                 proxima = entry.getKey();
+    //                 menorDistancia = entry.getValue();
+    //             }
+    //         }
 
-            if (proxima != null) {
-                rota.add(new Aresta(atual, proxima, menorDistancia));
-            }
+    //         if (proxima != null) {
+    //             rota.add(new Aresta(atual, proxima, menorDistancia));
+    //         }
 
-            atual = proxima;
-        }
+    //         atual = proxima;
+    //     }
 
-        return rota;
-    }
+    //     return rota;
+    // }
 
     public Cidade buscarCidadePorNome(String nome) {
         if (nome == null) {
